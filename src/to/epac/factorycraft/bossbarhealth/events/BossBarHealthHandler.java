@@ -91,7 +91,6 @@ public class BossBarHealthHandler implements Listener {
 				
 				if (bar.getTarget() != null && bar.getTarget().equals(entity)) {
 					bar.updateEnemy(player, (LivingEntity) entity, event.getAmount());
-					bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
 					
 					Bukkit.getScheduler().runTaskLater(plugin, () -> {
 						if (bar.attemptRemove())
@@ -136,8 +135,10 @@ public class BossBarHealthHandler implements Listener {
 					if (victim instanceof Player) {
 						if (!player.equals((Player) victim)) {
 							if (bar != null) {
-								if (bar.getTarget() != null)
+								if (bar.getTarget() != null) {
 									bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
+									bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
+								}
 								else
 									bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
 							}
@@ -154,8 +155,10 @@ public class BossBarHealthHandler implements Listener {
 						if (victim instanceof Player) {
 							if (!player.equals((Player) victim)) {
 								if (bar != null) {
-									if (bar.getTarget() != null)
+									if (bar.getTarget() != null) {
 										bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
+										bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
+									}
 									else
 										bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
 								}
@@ -166,13 +169,12 @@ public class BossBarHealthHandler implements Listener {
 			}
 			
 			for (Map.Entry<Player, HealthBar> entry : HealthBar.bars.entrySet()) {
-			Player player = entry.getKey();
+				Player player = entry.getKey();
 				HealthBar bar = entry.getValue();
 				
 				if (bar.getTarget() != null && bar.getTarget().equals(victim)) {
 					
 					bar.updateEnemy(player, (LivingEntity) victim, event.getDamage() * -1);
-					bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
 					
 					Bukkit.getScheduler().runTaskLater(plugin, () -> {
 						if (bar.attemptRemove())
