@@ -106,6 +106,8 @@ public class BossBarHealthHandler implements Listener {
 	public void onDamage(EntityDamageEvent event) {
 		Entity victim = event.getEntity();
 		
+		if (event.isCancelled()) return;
+		
 		Bukkit.getScheduler().runTask(plugin, () -> {
 			
 			if (victim instanceof Player) {
@@ -143,6 +145,17 @@ public class BossBarHealthHandler implements Listener {
 									bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
 							}
 						}
+					}
+					else {
+						if (bar != null) {
+							if (bar.getTarget() != null) {
+								bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
+								bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
+							}
+							else
+								bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
+						}
+						
 					}
 				}
 				else if (edbeEvent.getDamager() instanceof Projectile) {
