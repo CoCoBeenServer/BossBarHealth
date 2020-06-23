@@ -25,12 +25,13 @@ public class BossBarHealthHandler implements Listener {
 	
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
-		if (!plugin.getConfigManager().isSelfEnabled()) return;
 		
 		Player player = event.getPlayer();
 		HealthBar bar = HealthBar.bars.get(player);
-		if (bar != null)
+		
+		if (bar != null) {
 			bar.update(player, 0.0);
+		}
 		else {
 			bar = new HealthBar();
 			bar.create(player);
@@ -110,6 +111,7 @@ public class BossBarHealthHandler implements Listener {
 		
 		Bukkit.getScheduler().runTask(plugin, () -> {
 			
+			// If the victim is any player, update his bar
 			if (victim instanceof Player) {
 				Player player = (Player) victim;
 				HealthBar bar = HealthBar.bars.get(player);
@@ -125,15 +127,22 @@ public class BossBarHealthHandler implements Listener {
 				}
 			}
 			
+			// If EnemyBar is not enabled
 			if (!plugin.getConfigManager().isEnemyEnabled()) return;
 			
+			// If Entity Damage By Entity
 			if (event instanceof EntityDamageByEntityEvent) {
 				EntityDamageByEntityEvent edbeEvent = (EntityDamageByEntityEvent) event;
 				
+				// If victim is not LivintEntity (eg. Ender Crystal)
+				if (!(victim instanceof LivingEntity)) return;
+				
+				// If entity damaged by player
 				if (edbeEvent.getDamager() instanceof Player) {
 					Player player = (Player) edbeEvent.getDamager();
 					HealthBar bar = HealthBar.bars.get(player);
 					
+					// If player damage player
 					if (victim instanceof Player) {
 						if (!player.equals((Player) victim)) {
 							if (bar != null) {
@@ -146,25 +155,29 @@ public class BossBarHealthHandler implements Listener {
 							}
 						}
 					}
+					// If player damage entity
 					else {
 						if (bar != null) {
 							if (bar.getTarget() != null) {
 								bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
 								bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
 							}
-							else
+							else {
 								bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
+							}
 						}
-						
 					}
 				}
+				// If player damaged by entity projectile
 				else if (edbeEvent.getDamager() instanceof Projectile) {
 					Projectile projectile = (Projectile) edbeEvent.getDamager();
 					
+					// If shooter is player
 					if (projectile.getShooter() instanceof Player) {
 						Player player = (Player) projectile.getShooter();
 						HealthBar bar = HealthBar.bars.get(player);
 						
+						// If victim is player
 						if (victim instanceof Player) {
 							if (!player.equals((Player) victim)) {
 								if (bar != null) {
@@ -181,6 +194,7 @@ public class BossBarHealthHandler implements Listener {
 				}
 			}
 			
+			// Update everyone's EnemyBar if their target is the victim
 			for (Map.Entry<Player, HealthBar> entry : HealthBar.bars.entrySet()) {
 				Player player = entry.getKey();
 				HealthBar bar = entry.getValue();
@@ -191,7 +205,8 @@ public class BossBarHealthHandler implements Listener {
 					
 					Bukkit.getScheduler().runTaskLater(plugin, () -> {
 						if (bar.attemptRemove())
-							bar.getSelfBar().addPlayer(player);
+							if (plugin.getConfigManager().isSelfEnabled())
+								bar.getSelfBar().addPlayer(player);
 						
 					}, plugin.getConfigManager().getEnemyDuration());
 				}

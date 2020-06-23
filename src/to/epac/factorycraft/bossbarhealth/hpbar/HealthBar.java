@@ -45,6 +45,7 @@ public class HealthBar {
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			
 			if (!hide.contains(player.getUniqueId())) {
+				
 				HealthBar bar = bars.get(player);
 				if (bar != null)
 					bar.update(player, 0.0);
@@ -85,7 +86,7 @@ public class HealthBar {
 	
 	public void update(Player player, double lostgain) {
 		double hp = player.getHealth() * plugin.getConfigManager().getScale();
-		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * plugin.getConfigManager().getScale();
+		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getScale();
 		
 		
 		
@@ -127,10 +128,10 @@ public class HealthBar {
 			self.removePlayer(player);
 		
 		double hp = player.getHealth() * plugin.getConfigManager().getScale();
-		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * plugin.getConfigManager().getScale();
+		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getScale();
 		
 		double e_hp = target.getHealth() * plugin.getConfigManager().getEnemyScale();
-		double e_max = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * plugin.getConfigManager().getEnemyScale();
+		double e_max = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getEnemyScale();
 		
 		
 		
@@ -180,7 +181,7 @@ public class HealthBar {
 		
 		
 		enemy.setProgress(e_hp / e_max);
-		this.enemy.setTitle(title);
+		enemy.setTitle(title);
 	}
 	
 	public boolean attemptRemove() {
@@ -206,7 +207,7 @@ public class HealthBar {
 	
 	public void create(Player player) {
 		double hp = player.getHealth() * plugin.getConfigManager().getScale();
-		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * plugin.getConfigManager().getScale();
+		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getScale();
 		
 		String pattern = "#";
 		for (int i = 0; i < plugin.getConfigManager().getDecimal(); i++) {
@@ -232,7 +233,9 @@ public class HealthBar {
 		BossBar bossBar = Bukkit.createBossBar(title, plugin.getConfigManager().getColor(),
 				plugin.getConfigManager().getStyle(), new BarFlag[0]);
 		bossBar.setProgress(hp / max);
-		bossBar.addPlayer(player);
+		
+		if (plugin.getConfigManager().isSelfEnabled())
+			bossBar.addPlayer(player);
 		
 		self = bossBar;
 		lastUpdate = System.currentTimeMillis() / 1000;
@@ -245,10 +248,10 @@ public class HealthBar {
 			self.removePlayer(player);
 		
 		double hp = player.getHealth() * plugin.getConfigManager().getScale();
-		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * plugin.getConfigManager().getScale();
+		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getScale();
 		
 		double e_hp = target.getHealth() * plugin.getConfigManager().getEnemyScale();
-		double e_max = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() * plugin.getConfigManager().getEnemyScale();
+		double e_max = target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getEnemyScale();
 		double e_lostgain = lostgain * plugin.getConfigManager().getScale();
 		
 		String pattern = "#";
@@ -300,7 +303,9 @@ public class HealthBar {
 		BossBar bossBar = Bukkit.createBossBar(title, plugin.getConfigManager().getEnemyColor(),
 				plugin.getConfigManager().getEnemyStyle(), new BarFlag[0]);
 		bossBar.setProgress(e_hp / e_max);
-		bossBar.addPlayer(player);
+		
+		if (plugin.getConfigManager().isEnemyEnabled())
+			bossBar.addPlayer(player);
 		
 		this.enemy = bossBar;
 		this.target = target;

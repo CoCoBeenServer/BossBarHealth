@@ -26,7 +26,7 @@ public class BossBarHealth extends JavaPlugin {
 
         getCommand("BossBarHealth").setExecutor(new Commands());
         
-        if (configManager.isSelfEnabled())
+        if (configManager.isSelfEnabled() || configManager.isEnemyEnabled())
             HealthBar.createAll();
 
         int pluginId = 6432;
