@@ -8,9 +8,12 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 
 public class Commands implements CommandExecutor {
+	
+	private BossBarHealth plugin = BossBarHealth.inst();
 	
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	
@@ -44,8 +47,9 @@ public class Commands implements CommandExecutor {
             
             HealthBar bar = HealthBar.bars.get(player);
             if (bar != null) {
-            	if (!bar.getSelfBar().getPlayers().contains(player))
-            		bar.getSelfBar().addPlayer(player);
+            	if (plugin.getConfigManager().isSelfEnabled())
+            		if (!bar.getSelfBar().getPlayers().contains(player))
+            			bar.getSelfBar().addPlayer(player);
             }
             else {
             	bar = new HealthBar();

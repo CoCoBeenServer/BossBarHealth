@@ -235,7 +235,8 @@ public class HealthBar {
 		bossBar.setProgress(hp / max);
 		
 		if (plugin.getConfigManager().isSelfEnabled())
-			bossBar.addPlayer(player);
+			if (!hide.contains(player.getUniqueId()))
+				bossBar.addPlayer(player);
 		
 		self = bossBar;
 		lastUpdate = System.currentTimeMillis() / 1000;
@@ -305,7 +306,8 @@ public class HealthBar {
 		bossBar.setProgress(e_hp / e_max);
 		
 		if (plugin.getConfigManager().isEnemyEnabled())
-			bossBar.addPlayer(player);
+			if (!hide.contains(player.getUniqueId()))
+				bossBar.addPlayer(player);
 		
 		this.enemy = bossBar;
 		this.target = target;
