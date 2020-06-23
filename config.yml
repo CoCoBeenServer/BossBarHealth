@@ -14,7 +14,7 @@ BossBarHealth:
     Style: SEGMENTED_20
     # Scale of the boss bar health display
     # If the option is 2.0, it shows 40/40 when you have full health
-    Scale: 2.0
+    Scale: 1.0
     Format:
       # Display format of normal part of boss bar health, the one which shows constantly
       # Placeholders:
@@ -37,7 +37,7 @@ BossBarHealth:
     Enabled: true
     Color: GREEN
     Style: SEGMENTED_20
-    Scale: 2.0
+    Scale: 1.0
     # Duration of enemy's boss bar staying on screen, in ticks
     Duration: 40
     # If it is enabled, enemy's boss bar will override self boss bar when active
