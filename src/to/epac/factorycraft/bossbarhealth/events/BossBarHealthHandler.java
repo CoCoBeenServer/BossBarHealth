@@ -74,7 +74,7 @@ public class BossBarHealthHandler implements Listener {
 					HealthBar bar = HealthBar.bars.get(player);
 					if (bar != null) {
 						bar.update(player, event.getAmount());
-						bar.setLastUpdate(System.currentTimeMillis() / 1000);
+						bar.setLastUpdate(System.currentTimeMillis());
 						
 						Bukkit.getScheduler().runTaskLater(plugin, () -> {
 							bar.attemptUpdate(player);
@@ -118,7 +118,7 @@ public class BossBarHealthHandler implements Listener {
 				
 				if (bar != null) {
 					bar.update(player, event.getFinalDamage() * -1);
-					bar.setLastUpdate(System.currentTimeMillis() / 1000);
+					bar.setLastUpdate(System.currentTimeMillis());
 					
 					Bukkit.getScheduler().runTaskLater(plugin, () -> {
 						bar.attemptUpdate(player);
@@ -148,7 +148,7 @@ public class BossBarHealthHandler implements Listener {
 							if (bar != null) {
 								if (bar.getTarget() != null) {
 									bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
-									bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
+									bar.setEnemyLastUpdate(System.currentTimeMillis());
 								}
 								else
 									bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
@@ -160,7 +160,7 @@ public class BossBarHealthHandler implements Listener {
 						if (bar != null) {
 							if (bar.getTarget() != null) {
 								bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
-								bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
+								bar.setEnemyLastUpdate(System.currentTimeMillis());
 							}
 							else {
 								bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
@@ -183,7 +183,7 @@ public class BossBarHealthHandler implements Listener {
 								if (bar != null) {
 									if (bar.getTarget() != null) {
 										bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
-										bar.setEnemyLastUpdate(System.currentTimeMillis() / 1000);
+										bar.setEnemyLastUpdate(System.currentTimeMillis());
 									}
 									else
 										bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
@@ -203,7 +203,7 @@ public class BossBarHealthHandler implements Listener {
 					
 					bar.updateEnemy(player, (LivingEntity) victim, event.getDamage() * -1);
 					
-					Bukkit.getScheduler().runTaskLater(plugin, () -> {
+					Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> {
 						if (bar.attemptRemove())
 							if (plugin.getConfigManager().isSelfEnabled())
 								bar.getSelfBar().addPlayer(player);

@@ -80,7 +80,9 @@ public class HealthBar {
 	}
 	
 	public void attemptUpdate(Player player) {
-		if (System.currentTimeMillis() / 1000 - lastUpdate >= plugin.getConfigManager().getHpChangeDuration() / 20.0)
+		long elapsedTime = System.currentTimeMillis() - e_lastUpdate;
+		long confVal = plugin.getConfigManager().getEnemyDuration() / 20 * 1000L;
+		if (elapsedTime - confVal >= -20)
 			update(player, 0.0);
 	}
 	
@@ -182,10 +184,14 @@ public class HealthBar {
 		
 		enemy.setProgress(e_hp / e_max);
 		enemy.setTitle(title);
+		
+		this.target = target;
 	}
 	
 	public boolean attemptRemove() {
-		if (System.currentTimeMillis() / 1000 - e_lastUpdate >= plugin.getConfigManager().getEnemyDuration() / 20.0) {
+		long elapsedTime = System.currentTimeMillis() - e_lastUpdate;
+		long confVal = plugin.getConfigManager().getEnemyDuration() / 20 * 1000L;
+		if (elapsedTime - confVal >= -20) {
 			removeEnemy();
 			return true;
 		}
@@ -239,7 +245,7 @@ public class HealthBar {
 				bossBar.addPlayer(player);
 		
 		self = bossBar;
-		lastUpdate = System.currentTimeMillis() / 1000;
+		lastUpdate = System.currentTimeMillis();
 		
 		bars.put(player, this);
 	}
@@ -311,7 +317,7 @@ public class HealthBar {
 		
 		this.enemy = bossBar;
 		this.target = target;
-		this.e_lastUpdate = System.currentTimeMillis() / 1000;
+		this.e_lastUpdate = System.currentTimeMillis();
 		
 		bars.put(player, this);
 	}
