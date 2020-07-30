@@ -1,5 +1,5 @@
 main: to.epac.factorycraft.bossbarhealth.BossBarHealth
-version: 3.0.4
+version: 3.0.5
 name: BossBarHealth
 author: i998979
 description: Display players and enemies health on boss bar

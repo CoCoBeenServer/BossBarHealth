@@ -45,11 +45,17 @@ BossBarHealth:
     Format:
       # Placeholders:
       # %e_type%          Entity type of the enemy
-      # %e_name%          Name of the enemy, only work when the enemy is player
-      # %e_displayname%   Name of the enemy, only work when the enemy is player
+      # %e_name%          Name of the enemy
+      # %e_displayname%   Custom display name of the enemy
       # %e_hp%            Enemy's health
       # %e_max%           Enemy's maximum health
       # %e_hp_int%        Enemy's health in integer
       # %e_max_int%       Enemy's maximum health in integer
       HpLost: '%e_type% %e_name% %e_displayname%: %e_hp_int%/%e_max_int% %e_hp%/%e_max% &7(&c%e_change%&7)'
       HpGain: '%e_type% %e_name% %e_displayname%: %e_hp_int%/%e_max_int% %e_hp%/%e_max% &7(&a%e_change%&7)'
+    # Entity type in the list will not have enemy's hp bar shown for players
+    # Blacklist:
+    # - COW
+    # - CHICKEN
+    # - PIG
+    Blacklist: []

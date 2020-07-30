@@ -121,7 +121,13 @@ public class HealthBar {
 		
 		
 		
-		self.setProgress(hp / max);
+		if (hp / max > 1.0)
+			self.setProgress(1.0);
+		else if (hp / max < 0.0)
+			self.setProgress(0.0);
+		else
+			self.setProgress(hp / max);
+		
 		self.setTitle(title);
 	}
 	
@@ -182,7 +188,13 @@ public class HealthBar {
 		
 		
 		
-		enemy.setProgress(e_hp / e_max);
+		if (e_hp / e_max > 1.0)
+			enemy.setProgress(1.0);
+		else if (e_hp / e_max < 0.0)
+			enemy.setProgress(0.0);
+		else
+			enemy.setProgress(e_hp / e_max);
+		
 		enemy.setTitle(title);
 		
 		this.target = target;
@@ -238,7 +250,13 @@ public class HealthBar {
 		
 		BossBar bossBar = Bukkit.createBossBar(title, plugin.getConfigManager().getColor(),
 				plugin.getConfigManager().getStyle(), new BarFlag[0]);
-		bossBar.setProgress(hp / max);
+		
+		if (hp / max > 1.0)
+			bossBar.setProgress(1.0);
+		else if (hp / max < 0.0)
+			bossBar.setProgress(0.0);
+		else
+			bossBar.setProgress(hp / max);
 		
 		if (plugin.getConfigManager().isSelfEnabled())
 			if (!hide.contains(player.getUniqueId()))
@@ -309,7 +327,13 @@ public class HealthBar {
 		
 		BossBar bossBar = Bukkit.createBossBar(title, plugin.getConfigManager().getEnemyColor(),
 				plugin.getConfigManager().getEnemyStyle(), new BarFlag[0]);
-		bossBar.setProgress(e_hp / e_max);
+		
+		if (e_hp / e_max > 1.0)
+			bossBar.setProgress(1.0);
+		else if (e_hp / e_max < 0.0)
+			bossBar.setProgress(0.0);
+		else
+			bossBar.setProgress(e_hp / e_max);
 		
 		if (plugin.getConfigManager().isEnemyEnabled())
 			if (!hide.contains(player.getUniqueId()))

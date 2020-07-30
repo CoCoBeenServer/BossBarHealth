@@ -2,6 +2,7 @@ package to.epac.factorycraft.bossbarhealth.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
 import org.bukkit.boss.BarColor;
@@ -32,6 +33,8 @@ public class ConfigManager {
 	public static boolean override;
 	public static String e_fhplost;
 	public static String e_fhpgain;
+	
+	public static List<String> blacklist;
 	
 	public ConfigManager(BossBarHealth plugin) {
 		this.plugin = plugin;
@@ -64,6 +67,8 @@ public class ConfigManager {
 		override = conf.getBoolean("BossBarHealth.Enemy.Override", false);
 		e_fhplost = conf.getString("BossBarHealth.Enemy.Format.HpLost", "%e_displayname%: %e_hp_int%/%e_max_int% &7(&c%e_change%&7)");
 		e_fhpgain = conf.getString("BossBarHealth.Enemy.Format.HpGain", "%e_displayname%: %e_hp_int%/%e_max_int% &7(&a%e_change%&7)");
+		blacklist = conf.getStringList("BossBarHealth.Enemy.Blacklist");
+		
 	}
 	
 	public void save() {
@@ -99,6 +104,7 @@ public class ConfigManager {
 		conf.set("BossBarHealth.Enemy.Override", override);
 		conf.set("BossBarHealth.Enemy.Format.HpLost", e_fhplost);
 		conf.set("BossBarHealth.Enemy.Format.HpGain", e_fhpgain);
+		conf.set("BossBarHealth.Enemy.Blacklist", blacklist);
 		
 		try {
 			conf.save(confFile);
@@ -200,5 +206,9 @@ public class ConfigManager {
 	
 	public String getEnemyFormatHpGain() {
 		return e_fhpgain;
+	}
+	
+	public List<String> getEnemyBlacklist() {
+		return blacklist;
 	}
 }

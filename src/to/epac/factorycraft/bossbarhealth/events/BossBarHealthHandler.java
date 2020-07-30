@@ -85,6 +85,7 @@ public class BossBarHealthHandler implements Listener {
 			}
 			
 			if (!plugin.getConfigManager().isEnemyEnabled()) return;
+			if (plugin.getConfigManager().getEnemyBlacklist().contains(entity.getType().toString())) return;
 			
 			for (Map.Entry<Player, HealthBar> entry : HealthBar.bars.entrySet()) {
 				Player player = entry.getKey();
@@ -129,6 +130,7 @@ public class BossBarHealthHandler implements Listener {
 			
 			// If EnemyBar is not enabled
 			if (!plugin.getConfigManager().isEnemyEnabled()) return;
+			if (plugin.getConfigManager().getEnemyBlacklist().contains(victim.getType().toString())) return;
 			
 			// If Entity Damage By Entity
 			if (event instanceof EntityDamageByEntityEvent) {
