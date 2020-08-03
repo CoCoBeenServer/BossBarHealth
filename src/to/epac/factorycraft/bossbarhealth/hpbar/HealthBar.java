@@ -1,5 +1,7 @@
 package to.epac.factorycraft.bossbarhealth.hpbar;
 
+import static to.epac.factorycraft.bossbarhealth.BossBarHealth.usePapi;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,12 +10,14 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 
 public class HealthBar {
@@ -118,6 +122,8 @@ public class HealthBar {
 				.replaceAll("%hp_int%", (int) Math.ceil(hp) + "")
 				.replaceAll("%max_int%", (int) Math.ceil(max) + "");
 		title = ChatColor.translateAlternateColorCodes('&', title);
+		if (usePapi)
+			title = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, title);
 		
 		
 		
@@ -185,6 +191,8 @@ public class HealthBar {
 				title = title.replaceAll("%e_displayname%", "");
 		}
 		title = ChatColor.translateAlternateColorCodes('&', title);
+		if (usePapi)
+			title = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, title);
 		
 		
 		
@@ -245,6 +253,8 @@ public class HealthBar {
 				.replaceAll("%hp_int%", (int)Math.ceil(hp) + "")
 				.replaceAll("%max_int%", (int)Math.ceil(max) + "");
 		title = ChatColor.translateAlternateColorCodes('&', title);
+		if (usePapi)
+			title = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, title);
 		
 		
 		
@@ -322,6 +332,8 @@ public class HealthBar {
 				title = title.replaceAll("%e_displayname%", "");
 		}
 		title = ChatColor.translateAlternateColorCodes('&', title);
+		if (usePapi)
+			title = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, title);
 		
 		
 		

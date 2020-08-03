@@ -128,9 +128,13 @@ public class BossBarHealthHandler implements Listener {
 				}
 			}
 			
+			
+			
 			// If EnemyBar is not enabled
 			if (!plugin.getConfigManager().isEnemyEnabled()) return;
 			if (plugin.getConfigManager().getEnemyBlacklist().contains(victim.getType().toString())) return;
+			
+			
 			
 			// If Entity Damage By Entity
 			if (event instanceof EntityDamageByEntityEvent) {
@@ -190,6 +194,16 @@ public class BossBarHealthHandler implements Listener {
 									else
 										bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
 								}
+							}
+						}
+						else {
+							if (bar != null) {
+								if (bar.getTarget() != null) {
+									bar.updateEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
+									bar.setEnemyLastUpdate(System.currentTimeMillis());
+								}
+								else
+									bar.createEnemy(player, (LivingEntity) victim, event.getFinalDamage() * -1);
 							}
 						}
 					}

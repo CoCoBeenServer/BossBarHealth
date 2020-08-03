@@ -1,5 +1,6 @@
 package to.epac.factorycraft.bossbarhealth;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,6 +15,8 @@ public class BossBarHealth extends JavaPlugin {
     private static BossBarHealth inst;
     
     public ConfigManager configManager;
+    
+    public static boolean usePapi = false;
 
     public void onEnable() {
         inst = this;
@@ -28,6 +31,13 @@ public class BossBarHealth extends JavaPlugin {
         
         if (configManager.isSelfEnabled() || configManager.isEnemyEnabled())
             HealthBar.createAll();
+        
+        
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        	getLogger().info("PlaceholderAPI was found. You may use its placeholders in config.");
+        	usePapi = true;
+        }
+        
 
         int pluginId = 6432;
         Metrics metrics = new Metrics(this, pluginId);
