@@ -24,22 +24,27 @@ BossBarHealth:
       # %max%:            Player's maximum health
       # %hp_int%          Player's health in integer
       # %max_int%:        Player's maximum health in integer
-      Normal: '%name% %displayname% %hp_int%/%max_int% %hp%/%max%'
+      Normal: '%direction_cardinalfull% %name% %displayname% %hp_int%/%max_int% %hp%/%max%'
       # Display format of boss bar health when self HP changes
       # Placeholders:
       # %change%          Player's health gained/lost
-      HpLost: '%name% %displayname% %hp_int%/%max_int% %hp%/%max% &7(&c%change%&7)'
-      HpGain: '%name% %displayname% %hp_int%/%max_int% %hp%/%max% &7(&a%change%&7)'
+      HpLost: '%direction_cardinalfull% %name% %displayname% %hp_int%/%max_int% %hp%/%max% &7(&c%change%&7)'
+      HpGain: '%direction_cardinalfull% %name% %displayname% %hp_int%/%max_int% %hp%/%max% &7(&a%change%&7)'
       # Duration of lost/gained hp staying on screen, in ticks
-      Duration: 40
+      Duration:
+        Normal: 40
+        Zero: 10
+    # How frequent will the boss bar change when facing has changed
+    # Only effective when you have direction placeholders in the display format string
+    Facing:
+      Refresh: 20
+  
   Enemy:
     # If it is enabled, it will show enemy's hp when you attack
     Enabled: true
     Color: GREEN
     Style: SEGMENTED_20
     Scale: 1.0
-    # Duration of enemy's boss bar staying on screen, in ticks
-    Duration: 40
     # If it is enabled, enemy's boss bar will override self boss bar when active
     Override: false
     Format:
@@ -53,9 +58,16 @@ BossBarHealth:
       # %e_max_int%       Enemy's maximum health in integer
       HpLost: '%e_type% %e_name% %e_displayname%: %e_hp_int%/%e_max_int% %e_hp%/%e_max% &7(&c%e_change%&7)'
       HpGain: '%e_type% %e_name% %e_displayname%: %e_hp_int%/%e_max_int% %e_hp%/%e_max% &7(&a%e_change%&7)'
-    # Entity type in the list will not have enemy's hp bar shown for players
-    # Blacklist:
-    # - COW
-    # - CHICKEN
-    # - PIG
-    Blacklist: []
+      # Duration of enemy's boss bar staying on screen, in ticks
+      Duration:
+        Normal: 40
+        Zero: 10
+    # How frequent will the boss bar change when enemy's facing has changed
+    Facing:
+      Refresh: 20
+  # Entity type in the list will not have enemy's hp bar shown for players
+  # Blacklist:
+  # - COW
+  # - CHICKEN
+  # - PIG
+  Blacklist: []

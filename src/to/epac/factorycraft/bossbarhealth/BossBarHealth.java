@@ -6,7 +6,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import to.epac.factorycraft.bossbarhealth.commands.Commands;
 import to.epac.factorycraft.bossbarhealth.config.ConfigManager;
-import to.epac.factorycraft.bossbarhealth.events.BossBarHealthHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.DamageHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.JoinHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.QuitHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.RegainHealthHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.RespawnHandler;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import to.epac.factorycraft.bossbarhealth.metrics.Metrics;
 
@@ -25,12 +29,16 @@ public class BossBarHealth extends JavaPlugin {
         configManager.load();
 
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvents(new BossBarHealthHandler(), this);
+        pm.registerEvents(new DamageHandler(), this);
+        pm.registerEvents(new JoinHandler(), this);
+        pm.registerEvents(new QuitHandler(), this);
+        pm.registerEvents(new RegainHealthHandler(), this);
+        pm.registerEvents(new RespawnHandler(), this);
 
         getCommand("BossBarHealth").setExecutor(new Commands());
         
         if (configManager.isSelfEnabled() || configManager.isEnemyEnabled())
-            HealthBar.createAll();
+            HealthBar.updateAll();
         
         
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -38,14 +46,17 @@ public class BossBarHealth extends JavaPlugin {
         	usePapi = true;
         }
         
+        
 
         int pluginId = 6432;
         Metrics metrics = new Metrics(this, pluginId);
     }
 
     public void onDisable() {
-        inst = null;
+        
         HealthBar.removeAll();
+
+        inst = null;
     }
 
     public static BossBarHealth inst() {

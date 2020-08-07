@@ -17,6 +17,7 @@ public class ConfigManager {
 	private BossBarHealth plugin;
 	
 	public static int decimal;
+	
 	public static boolean self;
 	public static String color;
 	public static String style;
@@ -24,15 +25,20 @@ public class ConfigManager {
 	public static String fnormal;
 	public static String fhplost;
 	public static String fhpgain;
-	public static int dur;
+	public static int durnormal;
+	public static int durzero;
+	public static int refresh;
+	
 	public static boolean enemy;
 	public static String e_color;
 	public static String e_style;
 	public static double e_scale;
-	public static int e_dur;
 	public static boolean override;
 	public static String e_fhplost;
 	public static String e_fhpgain;
+	public static int e_durnormal;
+	public static int e_durzero;
+	public static int e_refresh;
 	
 	public static List<String> blacklist;
 	
@@ -51,6 +57,7 @@ public class ConfigManager {
 		
 		FileConfiguration conf = YamlConfiguration.loadConfiguration(confFile);
 		decimal = conf.getInt("BossBarHealth.Decimal", 2);
+		
 		self = conf.getBoolean("BossBarHealth.Self.Enabled", true);
 		color = conf.getString("BossBarHealth.Self.Color", "RED");
 		style = conf.getString("BossBarHealth.Self.Style", "SEGMENTED_20");
@@ -58,16 +65,22 @@ public class ConfigManager {
 		fnormal = conf.getString("BossBarHealth.Self.Format.Normal", "&b%hp_int%/%max_int%");
 		fhplost = conf.getString("BossBarHealth.Self.Format.HpLost", "&b%hp_int%/%max_int% &7(&c%change%&7)");
 		fhpgain = conf.getString("BossBarHealth.Self.Format.HpGain", "&b%hp_int%/%max_int% &7(&a%change%&7)");
-		dur = conf.getInt("BossBarHealth.Self.Format.Duration", 40);
+		durnormal = conf.getInt("BossBarHealth.Self.Format.Duration.Normal", 40);
+		durzero = conf.getInt("BossBarHealth.Self.Format.Duration.Zero", 10);
+		refresh = conf.getInt("BossBarHealth.Self.Facing.Refresh", 20);
+		
 		enemy = conf.getBoolean("BossBarHealth.Enemy.Enabled", true);
 		e_color = conf.getString("BossBarHealth.Enemy.Color", "GREEN");
 		e_style = conf.getString("BossBarHealth.Enemy.Style", "SEGMENTED_20");
 		e_scale = conf.getDouble("BossBarHealth.Enemy.Scale", 1.0);
-		e_dur = conf.getInt("BossBarHealth.Enemy.Show", 40);
 		override = conf.getBoolean("BossBarHealth.Enemy.Override", false);
 		e_fhplost = conf.getString("BossBarHealth.Enemy.Format.HpLost", "%e_displayname%: %e_hp_int%/%e_max_int% &7(&c%e_change%&7)");
 		e_fhpgain = conf.getString("BossBarHealth.Enemy.Format.HpGain", "%e_displayname%: %e_hp_int%/%e_max_int% &7(&a%e_change%&7)");
-		blacklist = conf.getStringList("BossBarHealth.Enemy.Blacklist");
+		e_durnormal = conf.getInt("BossBarHealth.Enemy.Duration.Normal", 40);
+		e_durzero = conf.getInt("BossBarHealth.Enemy.Duration.Zero", 10);
+		refresh = conf.getInt("BossBarHealth.Enemy.Facing.Refresh", 20);
+		
+		blacklist = conf.getStringList("BossBarHealth.Blacklist");
 		
 	}
 	
@@ -88,6 +101,7 @@ public class ConfigManager {
 		
 		FileConfiguration conf = new YamlConfiguration();
 		conf.set("BossBarHealth.Decimal", decimal);
+		
 		conf.set("BossBarHealth.Self.Enabled", self);
 		conf.set("BossBarHealth.Self.Color", color);
 		conf.set("BossBarHealth.Self.Style", style);
@@ -95,16 +109,22 @@ public class ConfigManager {
 		conf.set("BossBarHealth.Self.Format.Normal", fnormal);
 		conf.set("BossBarHealth.Self.Format.HpLost", fhplost);
 		conf.set("BossBarHealth.Self.Format.HpGain", fhpgain);
-		conf.set("BossBarHealth.Self.Format.Duration", dur);
+		conf.set("BossBarHealth.Self.Format.Duration.Normal", durnormal);
+		conf.set("BossBarHealth.Self.Format.Duration.Zero", durzero);
+		conf.set("BossBarHealth.Self.Format.Facing.Refresh", refresh);
+		
 		conf.set("BossBarHealth.Enemy.Enabled", enemy);
 		conf.set("BossBarHealth.Enemy.Color", e_color);
 		conf.set("BossBarHealth.Enemy.Style", e_style);
 		conf.set("BossBarHealth.Enemy.Scale", e_scale);
-		conf.set("BossBarHealth.Enemy.Show", e_dur);
 		conf.set("BossBarHealth.Enemy.Override", override);
 		conf.set("BossBarHealth.Enemy.Format.HpLost", e_fhplost);
 		conf.set("BossBarHealth.Enemy.Format.HpGain", e_fhpgain);
-		conf.set("BossBarHealth.Enemy.Blacklist", blacklist);
+		conf.set("BossBarHealth.Enemy.Format.Duration.Normal", e_durnormal);
+		conf.set("BossBarHealth.Enemy.Format.Duration.Zero", e_durzero);
+		conf.set("BossBarHealth.Enemy.Facing.Refresh", e_refresh);
+		
+		conf.set("BossBarHealth.Blacklist", blacklist);
 		
 		try {
 			conf.save(confFile);
@@ -162,20 +182,24 @@ public class ConfigManager {
 		return fhpgain;
 	}
 	
-	public int getHpChangeDuration() {
-		return dur;
+	public int getDurationNormal() {
+		return durnormal;
 	}
+	
+	public int getDurationZero() {
+		return durzero;
+	}
+	
+	public int getFacingRefresh() {
+		return refresh;
+	}
+	
+	
+	
+	
 	
 	public boolean isEnemyEnabled() {
 		return enemy;
-	}
-	
-	public boolean getOverride() {
-		return override;
-	}
-	
-	public int getEnemyDuration() {
-		return e_dur;
 	}
 	
 	public BarColor getEnemyColor() {
@@ -200,6 +224,10 @@ public class ConfigManager {
 		return e_scale;
 	}
 	
+	public boolean getOverride() {
+		return override;
+	}
+	
 	public String getEnemyFormatHpLost() {
 		return e_fhplost;
 	}
@@ -208,7 +236,21 @@ public class ConfigManager {
 		return e_fhpgain;
 	}
 	
-	public List<String> getEnemyBlacklist() {
+	public int getEnemyDurNormal() {
+		return e_durnormal;
+	}
+	
+	public int getEnemyDurZero() {
+		return e_durzero;
+	}
+	
+	public int getEnemyFacingRefresh() {
+		return e_refresh;
+	}
+	
+	
+	
+	public List<String> getBlacklist() {
 		return blacklist;
 	}
 }

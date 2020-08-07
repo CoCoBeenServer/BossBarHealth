@@ -53,7 +53,7 @@ public class Commands implements CommandExecutor {
             }
             else {
             	bar = new HealthBar();
-            	bar.create(player);
+            	bar.update(player, null, 0, true);
             }
             
         }
