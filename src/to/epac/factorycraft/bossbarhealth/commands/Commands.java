@@ -2,6 +2,7 @@ package to.epac.factorycraft.bossbarhealth.commands;
 
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,21 +18,40 @@ public class Commands implements CommandExecutor {
 	
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     	
+        if (args.length == 0) {
+            helpPage(sender);
+            return false;
+        }
+        
+    	if (args[0].equalsIgnoreCase("reload")) {
+    		if (!sender.hasPermission("BossBarHealth.Admin")) {
+    			sender.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
+                return false;
+            }
+    		
+        	plugin.getConfigManager().load();
+        	
+        	HealthBar.removeAll();
+        	
+        	if (plugin.getConfigManager().isSelfEnabled() || plugin.getConfigManager().isEnemyEnabled())
+                   HealthBar.updateAll();
+        	
+        	sender.sendMessage(ChatColor.GREEN + "Configuration reloaded.");
+        	return true;
+        }
+    	
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You must be a player to execute command.");
             return false;
         }
+        
+        
         
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
         
         if (!player.hasPermission("BossBarHealth.Admin")) {
             player.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
-            return false;
-        }
-        
-        if (args.length == 0) {
-            helpPage(sender);
             return false;
         }
         

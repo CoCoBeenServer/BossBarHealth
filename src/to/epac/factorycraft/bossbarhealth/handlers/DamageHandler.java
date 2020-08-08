@@ -72,7 +72,9 @@ public class DamageHandler implements Listener {
 					Projectile proj = (Projectile) edbeEvent.getDamager();
 					// If shooter is player
 					if (proj.getShooter() instanceof Player)
-						damager = (Player) proj.getShooter();
+						// If shooter is not damaging himself
+						if (!((Player) proj.getShooter()).equals(victim))
+							damager = (Player) proj.getShooter();
 				}
 				
 				if (damager != null) {
@@ -86,7 +88,9 @@ public class DamageHandler implements Listener {
 				}
 			}
 			
-			
+			final int delay = (((LivingEntity) victim).getHealth() <= 0)
+					? plugin.getConfigManager().getEnemyDurZero()
+							: plugin.getConfigManager().getEnemyDurNormal();
 			
 			// Update everyone's EnemyBar if their target is the victim
 			for (Map.Entry<Player, HealthBar> entry : HealthBar.bars.entrySet()) {
@@ -98,12 +102,12 @@ public class DamageHandler implements Listener {
 					bar.updateEnemy(player, (LivingEntity) victim, BarType.HPLOST, event.getDamage() * -1, false);
 					
 					Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> {
-						if (bar.attemptRemove())
+						if (bar.attemptRemove(delay))
 							if (plugin.getConfigManager().isSelfEnabled())
 								if (!HealthBar.hide.contains(player.getUniqueId()))
 									bar.getSelfBar().addPlayer(player);
 						
-					}, plugin.getConfigManager().getEnemyDurNormal());
+					}, delay);
 				}
 			}
 		});

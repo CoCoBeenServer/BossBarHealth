@@ -42,6 +42,11 @@ public class HealthBar {
 	private long lastUpdate;
 	private long e_lastUpdate;
 	
+	private double lostgain;
+	private BarType type;
+	private double e_lostgain;
+	private BarType e_type;
+	
 	public HealthBar() {}
 	public HealthBar(BossBar self) {
 		this.self = self;
@@ -90,6 +95,8 @@ public class HealthBar {
 				if (bar != null) {
 					bar.remove();
 					bar.removeEnemy();
+					
+					bars.remove(player);
 				}
 			}
 		});
@@ -133,7 +140,10 @@ public class HealthBar {
 			title = plugin.getConfigManager().getFormatHpGain().replaceAll("%change%", "+" + df.format(lostgain * plugin.getConfigManager().getScale()));
 		else if ((type == null && lostgain == 0.0) || type == BarType.NORMAL)
 			title = plugin.getConfigManager().getFormatNormal();
-			
+		
+		this.type = type;
+		this.lostgain = lostgain;
+		
 		
 		
 		
@@ -217,9 +227,12 @@ public class HealthBar {
 		
 		String title = "";
 		if ((type == null && lostgain < 0.0) || type == BarType.HPLOST)
-			title = plugin.getConfigManager().getEnemyFormatHpLost().replaceAll("%e_change%", df.format(e_lostgain));
+			title = plugin.getConfigManager().getEnemyFormatHpLost().replaceAll("%e_change%", df.format(e_lostgain * plugin.getConfigManager().getScale()));
 		else if ((type == null && lostgain >= 0.0) || type == BarType.HPGAIN)
-			title = plugin.getConfigManager().getEnemyFormatHpGain().replaceAll("%e_change%", "+" + df.format(e_lostgain));
+			title = plugin.getConfigManager().getEnemyFormatHpGain().replaceAll("%e_change%", "+" + df.format(e_lostgain * plugin.getConfigManager().getScale()));
+		
+		this.e_lostgain = lostgain;
+		this.e_type = type;
 		
 		
 		
@@ -296,9 +309,9 @@ public class HealthBar {
 			enemy.setProgress(e_hp / e_max);
 	}
 	
-	public boolean attemptRemove() {
+	public boolean attemptRemove(int delay) {
 		long elapsedTime = System.currentTimeMillis() - e_lastUpdate;
-		long confVal = plugin.getConfigManager().getEnemyDurNormal() / 20 * 1000L;
+		long confVal = delay / 20 * 1000L;
 		if (elapsedTime - confVal >= -20) {
 			removeEnemy();
 			return true;
@@ -307,11 +320,17 @@ public class HealthBar {
 	}
 	
 	public void remove() {
+		this.lostgain = 0;
+		this.type = null;
+		
 		if (self != null)
 			self.removeAll();
 	}
 	
 	public void removeEnemy() {
+		this.lostgain = 0;
+		this.type = null;
+		
 		if (enemy != null) {
 			enemy.removeAll();
 			enemy = null;
@@ -344,5 +363,33 @@ public class HealthBar {
 	}
 	public void setEnemyLastUpdate(long lastUpdate) {
 		this.e_lastUpdate = lastUpdate;
+	}
+	
+	
+	
+	
+	public double getLostgain() {
+		return lostgain;
+	}
+	public void setLostgain(double lostgain) {
+		this.lostgain = lostgain;
+	}
+	public BarType getType() {
+		return type;
+	}
+	public void setType(BarType type) {
+		this.type = type;
+	}
+	public double getEnemyLostgain() {
+		return e_lostgain;
+	}
+	public void setEnemylostgain(double lostgain) {
+		this.e_lostgain = lostgain;
+	}
+	public BarType getEnemyType() {
+		return e_type;
+	}
+	public void setEnemyType(BarType type) {
+		this.e_type = type;
 	}
 }

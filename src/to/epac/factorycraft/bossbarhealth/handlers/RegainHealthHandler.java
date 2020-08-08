@@ -58,12 +58,14 @@ public class RegainHealthHandler implements Listener {
 				if (bar.getTarget() != null && bar.getTarget().equals(entity)) {
 					bar.updateEnemy(player, entity, BarType.HPGAIN, event.getAmount(), false);
 					
+					int delay = plugin.getConfigManager().getEnemyDurNormal();
+					
 					Bukkit.getScheduler().runTaskLater(plugin, () -> {
-						if (bar.attemptRemove())
+						if (bar.attemptRemove(delay))
 							if (!HealthBar.hide.contains(player.getUniqueId()))
 								bar.getSelfBar().addPlayer(player);
 						
-					}, plugin.getConfigManager().getEnemyDurNormal());
+					}, delay);
 				}
 			}
 		});

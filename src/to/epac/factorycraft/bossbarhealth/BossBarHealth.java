@@ -8,6 +8,7 @@ import to.epac.factorycraft.bossbarhealth.commands.Commands;
 import to.epac.factorycraft.bossbarhealth.config.ConfigManager;
 import to.epac.factorycraft.bossbarhealth.handlers.DamageHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.JoinHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.PlayerMoveHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.QuitHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.RegainHealthHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.RespawnHandler;
@@ -34,11 +35,13 @@ public class BossBarHealth extends JavaPlugin {
         pm.registerEvents(new QuitHandler(), this);
         pm.registerEvents(new RegainHealthHandler(), this);
         pm.registerEvents(new RespawnHandler(), this);
-
+        
         getCommand("BossBarHealth").setExecutor(new Commands());
         
         if (configManager.isSelfEnabled() || configManager.isEnemyEnabled())
             HealthBar.updateAll();
+        
+        PlayerMoveHandler.start();
         
         
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
