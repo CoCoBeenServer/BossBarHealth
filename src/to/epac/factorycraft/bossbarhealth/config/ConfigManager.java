@@ -78,7 +78,7 @@ public class ConfigManager {
 		e_fhpgain = conf.getString("BossBarHealth.Enemy.Format.HpGain", "%e_displayname%: %e_hp_int%/%e_max_int% &7(&a%e_change%&7)");
 		e_durnormal = conf.getInt("BossBarHealth.Enemy.Format.Duration.Normal", 40);
 		e_durzero = conf.getInt("BossBarHealth.Enemy.Format.Duration.Zero", 10);
-		refresh = conf.getInt("BossBarHealth.Enemy.Facing.Refresh", 20);
+		e_refresh = conf.getInt("BossBarHealth.Enemy.Facing.Refresh", 20);
 		
 		blacklist = conf.getStringList("BossBarHealth.Blacklist");
 		

@@ -20,8 +20,9 @@ public class Utils {
 	 * @param type Output type
 	 * @return String of the direction
 	 */
-	// TODO - Convert directions
 	public static String getDirection(double yaw, String type) {
+		
+		yaw = (yaw + 360) % 360;
 		
 		if (type.equals("NUMBER")) {
 			String pattern = "#";
@@ -33,35 +34,74 @@ public class Utils {
 		}
 		
         String direction = "";
-
-        if (0 <= yaw && yaw < 22.5) {
-            direction = "North";
+        
+        // ORDINAL (E, S, W, N)
+        if (type.startsWith("ORDINAL")) {
+            if (yaw >= 0 && yaw < 45) {
+            	if (type.equals("ORDINAL_FULL")) direction = "South";
+            	else if (type.equals("ORDINAL")) direction = "S";
+            }
+            if (45 <= yaw && yaw < 135) {
+                if (type.equals("ORDINAL_FULL")) direction = "West";
+            	else if (type.equals("ORDINAL")) direction = "W";
+            }
+            if (135 <= yaw && yaw < 225) {
+                if (type.equals("ORDINAL_FULL")) direction = "North";
+            	else if (type.equals("ORDINAL")) direction = "N";
+            }
+            if (225 <= yaw && yaw < 315) {
+                if (type.equals("ORDINAL_FULL")) direction = "East";
+            	else if (type.equals("ORDINAL")) direction = "E";
+            }
+            if (315 <= yaw && yaw <= 360) {
+            	if (type.equals("ORDINAL_FULL")) direction = "South";
+            	else if (type.equals("ORDINAL")) direction = "S";
+            }
         }
-        if (22.5 <= yaw && yaw < 67.5) {
-            direction = "North East";
+        
+        
+        
+        // CARDINAL and NE, SE, etc...
+        else if (type.startsWith("CARDINAL")) {
+            if (0 <= yaw && yaw < 22.5) {
+            	if (type.equals("CARDINAL_FULL")) direction = "South";
+            	else if (type.equals("CARDINAL")) direction = "S";
+            }
+            if (22.5 <= yaw && yaw < 67.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "SouthWest";
+            	else if (type.equals("CARDINAL")) direction = "SW";
+            }
+            if (67.5 <= yaw && yaw < 112.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "West";
+            	else if (type.equals("CARDINAL")) direction = "W";
+            }
+            if (112.5 <= yaw && yaw < 157.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "NorthWest";
+            	else if (type.equals("CARDINAL")) direction = "NW";
+            }
+            if (157.5 <= yaw && yaw < 202.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "North";
+            	else if (type.equals("CARDINAL")) direction = "N";
+            }
+            if (202.5 <= yaw && yaw < 247.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "NorthEast";
+            	else if (type.equals("CARDINAL")) direction = "NE";
+            }
+            if (247.5 <= yaw && yaw < 292.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "East";
+            	else if (type.equals("CARDINAL")) direction = "E";
+            }
+            if (292.5 <= yaw && yaw < 337.5) {
+                if (type.equals("CARDINAL_FULL")) direction = "SouthEast";
+            	else if (type.equals("CARDINAL")) direction = "SE";
+            }
+            if (337.5 <= yaw && yaw <= 360) {
+            	if (type.equals("CARDINAL_FULL")) direction = "South";
+            	else if (type.equals("CARDINAL")) direction = "S";
+            }
         }
-        if (67.5 <= yaw && yaw < 112.5) {
-            direction = "East";
-        }
-        if (112.5 <= yaw && yaw < 157.5) {
-            direction = "SouthEast";
-        }
-        if (157.5 <= yaw && yaw < 202.5) {
-            direction = "South";
-        }
-        if (202.5 <= yaw && yaw < 247.5) {
-            direction = "SouthWest";
-        }
-        if (247.5 <= yaw && yaw < 292.5) {
-            direction = "West";
-        }
-        if (292.5 <= yaw && yaw < 337.5) {
-            direction = "NorthWest";
-        }
-        if (337.5 <= yaw && yaw <= 360) {
-            direction = "North";
-        }
-		
+        
+        
 		return direction;
 	}
 }
