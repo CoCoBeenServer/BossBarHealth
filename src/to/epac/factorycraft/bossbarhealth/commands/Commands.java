@@ -2,7 +2,6 @@ package to.epac.factorycraft.bossbarhealth.commands;
 
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +35,7 @@ public class Commands implements CommandExecutor {
         	if (plugin.getConfigManager().isSelfEnabled() || plugin.getConfigManager().isEnemyEnabled())
                    HealthBar.updateAll();
         	
-        	sender.sendMessage(ChatColor.GREEN + "Configuration reloaded.");
+        	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &fConfiguration reloaded."));
         	return true;
         }
     	
@@ -60,7 +59,7 @@ public class Commands implements CommandExecutor {
         }
         
         else if (args[0].equalsIgnoreCase("show")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3[&dBoss&5Bar&cHealth&3]&r &aShowing health bar."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &aShowing health bar."));
             
             if (HealthBar.hide.contains(uuid))
                 HealthBar.hide.remove(uuid);
@@ -73,13 +72,13 @@ public class Commands implements CommandExecutor {
             }
             else {
             	bar = new HealthBar();
-            	bar.update(player, null, 0, true);
+            	bar.update(player, null, 0, null, true);
             }
             
         }
         
         else if (args[0].equalsIgnoreCase("hide")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&3[&dBoss&5Bar&cHealth&3]&r &cHiding health bar."));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &cHiding health bar."));
             
             if (!HealthBar.hide.contains(uuid))
                 HealthBar.hide.add(uuid);
@@ -94,12 +93,11 @@ public class Commands implements CommandExecutor {
     }
     
     public void helpPage(CommandSender sender) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&m----------&b[&dBoss&5Bar&cHealth&b]&9&m----------"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&dMain command: /bs"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c<>: Required &d[]: Optional"));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/bbh Show&b: &3Show BossBarHealth to player."));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/bbh Hide&b: &3Hide BossBarHealth from player."));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&b/bbh Help&b: &3Show the help page."));
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&9&m----------&b[&dBoss&5Bar&cHealth&b]&9&m----------"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽-----➽ &7BossBarHealth &8➽-----➽"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽ &c<>: Required &d[]: Optional"));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽ &b/bbh Show&b: &3Show BossBarHealth to player."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽ &b/bbh Hide&b: &3Hide BossBarHealth from player."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽ &b/bbh Help&b: &3Show the help page."));
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽-----➽ &7BossBarHealth &8➽-----➽"));
     }
 }

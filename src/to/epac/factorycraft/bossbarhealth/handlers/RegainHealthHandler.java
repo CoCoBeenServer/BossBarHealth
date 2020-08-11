@@ -34,7 +34,7 @@ public class RegainHealthHandler implements Listener {
 				
 				if (bar != null) {
 					// Update with HpGain format
-					bar.update(player, BarType.HPGAIN, event.getAmount(), false);
+					bar.update(player, BarType.HPGAIN, event.getAmount(), null, false);
 					bar.setLastUpdate(System.currentTimeMillis());
 					
 					// Attempt to update SelfBar after fade-out time
@@ -56,7 +56,7 @@ public class RegainHealthHandler implements Listener {
 				HealthBar bar = entry.getValue();
 				
 				if (bar.getTarget() != null && bar.getTarget().equals(entity)) {
-					bar.updateEnemy(player, entity, BarType.HPGAIN, event.getAmount(), false);
+					bar.updateEnemy(player, entity, BarType.HPGAIN, event.getAmount(), null, false);
 					
 					int delay = plugin.getConfigManager().getEnemyDurNormal();
 					

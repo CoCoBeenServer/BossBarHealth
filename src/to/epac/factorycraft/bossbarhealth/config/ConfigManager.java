@@ -2,22 +2,28 @@ package to.epac.factorycraft.bossbarhealth.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
+import to.epac.factorycraft.bossbarhealth.hpbar.BarSetting;
 
 public class ConfigManager {
 	
 	private BossBarHealth plugin;
 	
+	// Global settings
 	public static int decimal;
 	
+	// SelfBar
 	public static boolean self;
 	public static String color;
 	public static String style;
@@ -29,6 +35,7 @@ public class ConfigManager {
 	public static int durzero;
 	public static int refresh;
 	
+	// EnemyBar
 	public static boolean enemy;
 	public static String e_color;
 	public static String e_style;
@@ -40,7 +47,16 @@ public class ConfigManager {
 	public static int e_durzero;
 	public static int e_refresh;
 	
+	
+	
 	public static List<String> blacklist;
+	
+	public static HashMap<String, BarSetting> causesetting;
+	
+	public static boolean wgenabled;
+	public static HashMap<String, BarSetting> wgsetting;
+	
+	
 	
 	public ConfigManager(BossBarHealth plugin) {
 		this.plugin = plugin;
@@ -81,6 +97,23 @@ public class ConfigManager {
 		e_refresh = conf.getInt("BossBarHealth.Enemy.Facing.Refresh", 20);
 		
 		blacklist = conf.getStringList("BossBarHealth.Blacklist");
+		
+		causesetting = new HashMap<>();
+		for (String cause : conf.getConfigurationSection("BossBarHealth.DamageCause").getKeys(false)) {
+			String dcolor = conf.getString("BossBarHealth.DamageCause." + cause + ".Color", color);
+			String dstyle = conf.getString("BossBarHealth.DamageCause." + cause + ".Style", style);
+			
+			causesetting.put(cause, new BarSetting(BarColor.valueOf(dcolor), BarStyle.valueOf(dstyle)));
+		}
+		
+		wgenabled = conf.getBoolean("BossBarHealth.Hooks.WorldGuard.Enabled", false);
+		wgsetting = new HashMap<>();
+		for (String region : conf.getConfigurationSection("BossBarHealth.Hooks.WorldGuard.Regions").getKeys(false)) {
+			String dcolor = conf.getString("BossBarHealth.Hooks.WorldGuard.Regions." + region + ".Color", color);
+			String dstyle = conf.getString("BossBarHealth.Hooks.WorldGuard.Regions." + region + ".Style", style);
+			
+			wgsetting.put(region, new BarSetting(BarColor.valueOf(dcolor), BarStyle.valueOf(dstyle)));
+		}
 		
 	}
 	
@@ -125,6 +158,16 @@ public class ConfigManager {
 		conf.set("BossBarHealth.Enemy.Facing.Refresh", e_refresh);
 		
 		conf.set("BossBarHealth.Blacklist", blacklist);
+		
+		for (Map.Entry<String, BarSetting> entry : causesetting.entrySet()) {
+			DamageCause cause = DamageCause.valueOf(entry.getKey());
+			BarSetting setting = entry.getValue();
+			
+			if (setting.getColor() != null)
+				conf.set("BossBarHealth.DamageCause." + cause + ".Color", setting.getColor());
+			if (setting.getStyle() != null)
+				conf.set("BossBarHealth.DamageCause." + cause + ".Style", setting.getStyle());
+		}
 		
 		try {
 			conf.save(confFile);
@@ -252,5 +295,17 @@ public class ConfigManager {
 	
 	public List<String> getBlacklist() {
 		return blacklist;
+	}
+	public HashMap<String, BarSetting> getCauseSetting() {
+		return causesetting;
+	}
+	
+	
+	
+	public boolean isWgEnabled() {
+		return wgenabled;
+	}
+	public HashMap<String, BarSetting> getWgSetting() {
+		return wgsetting;
 	}
 }

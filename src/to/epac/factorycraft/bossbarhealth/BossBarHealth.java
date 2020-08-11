@@ -12,6 +12,7 @@ import to.epac.factorycraft.bossbarhealth.handlers.PlayerMoveHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.QuitHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.RegainHealthHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.RespawnHandler;
+import to.epac.factorycraft.bossbarhealth.hooks.WorldGuard.WgRegionHandler;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import to.epac.factorycraft.bossbarhealth.metrics.Metrics;
 
@@ -22,6 +23,7 @@ public class BossBarHealth extends JavaPlugin {
     public ConfigManager configManager;
     
     public static boolean usePapi = false;
+    public static boolean useWorldGuard = false;
 
     public void onEnable() {
         inst = this;
@@ -47,6 +49,12 @@ public class BossBarHealth extends JavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
         	getLogger().info("PlaceholderAPI was found. You may use its placeholders in config.");
         	usePapi = true;
+        }
+        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null
+        		&& Bukkit.getPluginManager().getPlugin("WorldGuardEvents") != null) {
+        	getLogger().info("WorldGuard and WorldGuardEvents were found. WorldGuard hook settings will now work.");
+        	useWorldGuard = true;
+        	pm.registerEvents(new WgRegionHandler(), this);
         }
         
         

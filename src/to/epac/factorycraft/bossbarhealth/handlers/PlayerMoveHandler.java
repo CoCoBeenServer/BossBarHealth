@@ -23,14 +23,10 @@ public class PlayerMoveHandler {
 					
 					if (bar == null) {
 						bar = new HealthBar();
-						bar.update(player, BarType.NORMAL, 0.0, true);
+						bar.update(player, BarType.NORMAL, 0.0, null, true);
 					}
-					else {
-						bar.update(player, bar.getType(), bar.getLostgain(), false);
-						
-						if (bar.getTarget() != null)
-							bar.updateEnemy(player, bar.getTarget(), bar.getEnemyType(), bar.getEnemyLostgain(), false);
-					}
+					else
+						bar.update(player, bar.getType(), bar.getLostgain(), bar.getCause(), false);
 				}
 			}
 		};
@@ -47,7 +43,7 @@ public class PlayerMoveHandler {
 					
 					if (bar != null) {
 						if (bar.getTarget() != null)
-							bar.updateEnemy(player, bar.getTarget(), bar.getEnemyType(), bar.getEnemyLostgain(), false);
+							bar.updateEnemy(player, bar.getTarget(), bar.getEnemyType(), bar.getEnemyLostgain(), bar.getEnemyCause(), false);
 					}
 				}
 			}

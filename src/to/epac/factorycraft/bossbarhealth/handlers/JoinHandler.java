@@ -23,10 +23,10 @@ public class JoinHandler implements Listener {
 			
 			if (bar == null) {
 				bar = new HealthBar();
-				bar.update(player, null, 0.0, true);
+				bar.update(player, null, 0.0, null, true);
 			}
 			else
-				bar.update(player, null, 0.0, false);
+				bar.update(player, null, 0.0, null, false);
 			
 		});
 	}

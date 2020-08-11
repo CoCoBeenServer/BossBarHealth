@@ -38,7 +38,7 @@ public class DamageHandler implements Listener {
 				HealthBar bar = HealthBar.bars.get(player);
 				
 				if (bar != null) {
-					bar.update(player, BarType.HPLOST, event.getFinalDamage() * -1, false);
+					bar.update(player, BarType.HPLOST, event.getFinalDamage() * -1, event.getCause(), false);
 					bar.setLastUpdate(System.currentTimeMillis());
 					
 					Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -82,7 +82,7 @@ public class DamageHandler implements Listener {
 					
 					if (bar != null) {
 						boolean create = bar.getTarget() == null;
-						bar.updateEnemy(damager, (LivingEntity) victim, BarType.HPLOST, event.getFinalDamage() * -1, create);
+						bar.updateEnemy(damager, (LivingEntity) victim, BarType.HPLOST, event.getFinalDamage() * -1, event.getCause(), create);
 						bar.setEnemyLastUpdate(System.currentTimeMillis());
 					}
 				}
@@ -99,7 +99,7 @@ public class DamageHandler implements Listener {
 				
 				if (bar.getTarget() != null && bar.getTarget().equals(victim)) {
 					
-					bar.updateEnemy(player, (LivingEntity) victim, BarType.HPLOST, event.getDamage() * -1, false);
+					bar.updateEnemy(player, (LivingEntity) victim, BarType.HPLOST, event.getDamage() * -1, event.getCause(), false);
 					
 					Bukkit.getServer().getScheduler().runTaskLater(plugin, () -> {
 						if (bar.attemptRemove(delay))

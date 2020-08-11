@@ -1,6 +1,7 @@
 package to.epac.factorycraft.bossbarhealth.hpbar;
 
 import static to.epac.factorycraft.bossbarhealth.BossBarHealth.usePapi;
+import static to.epac.factorycraft.bossbarhealth.BossBarHealth.useWorldGuard;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -14,13 +15,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.raidstone.wgevents.WorldGuardEvents;
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.Utils.Utils;
 
@@ -44,8 +49,10 @@ public class HealthBar {
 	
 	private double lostgain;
 	private BarType type;
+	private DamageCause cause;
 	private double e_lostgain;
 	private BarType e_type;
+	private DamageCause e_cause;
 	
 	public HealthBar() {}
 	public HealthBar(BossBar self) {
@@ -56,7 +63,7 @@ public class HealthBar {
 		this.enemy = enemy;
 		this.target = target;
 	}
-
+	
 	
 	
 	public static void updateAll() {
@@ -68,22 +75,13 @@ public class HealthBar {
 				
 				if (bar == null) {
 					bar = new HealthBar();
-					bar.update(player, null, 0.0, true);
+					bar.update(player, null, 0.0, null, true);
 				}
 				else
-					bar.update(player, null, 0.0, false);
+					bar.update(player, null, 0.0, null, false);
 			}
 		});
 	}
-	
-	/*public static void createAll() {
-		Bukkit.getOnlinePlayers().forEach(player -> {
-			
-			
-			
-			
-		});
-	}*/
 	
 	public static void removeAll() {
 		Bukkit.getOnlinePlayers().forEach(player -> {
@@ -113,12 +111,22 @@ public class HealthBar {
 		long elapsedTime = System.currentTimeMillis() - lastUpdate;
 		long confVal = plugin.getConfigManager().getEnemyDurNormal() / 20 * 1000L;
 		
-		if (elapsedTime - confVal >= -20)
-			update(player, null, 0.0, false);
+		if (elapsedTime - confVal >= 0)
+			update(player, null, 0.0, null, false);
 	}
 	
 	
-	public void update(Player player, @Nullable BarType type, double lostgain, boolean create) {
+	
+	/**
+	 * Update/create SelfBar for player
+	 * 
+	 * @param player Player to update/create
+	 * @param type Bar type to apply, eg. HPLOST when health lost, null when it depends on lostgain
+	 * @param lostgain Hp lost/gained
+	 * @param cause Cause of the damage
+	 * @param create Create a new boss bar object or not
+	 */
+	public void update(Player player, @Nullable BarType type, double lostgain, @Nullable DamageCause cause, boolean create) {
 		double hp = player.getHealth() * plugin.getConfigManager().getScale();
 		double max = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * plugin.getConfigManager().getScale();
 		
@@ -133,7 +141,6 @@ public class HealthBar {
 		
 		
 		String title = "";
-		// TODO - See if lostgain comparison usable or not, if not remove it
 		if ((type == null && lostgain < 0.0) || type == BarType.HPLOST)
 			title = plugin.getConfigManager().getFormatHpLost().replaceAll("%change%", df.format(lostgain * plugin.getConfigManager().getScale()));
 		else if ((type == null && lostgain > 0.0) || type == BarType.HPGAIN)
@@ -143,7 +150,7 @@ public class HealthBar {
 		
 		this.type = type;
 		this.lostgain = lostgain;
-		
+		this.cause = cause;
 		
 		
 		
@@ -168,11 +175,72 @@ public class HealthBar {
 		
 		
 		
+		// ######################### //
+		// BarColor, BarStyle
+		// ######################### //
+		// Update BarColor and BarStyle based on DamageCause
+		BarColor color = plugin.getConfigManager().getColor();
+		BarStyle style = plugin.getConfigManager().getStyle();
+		
+		// If WorldGuard is installed and hook enabled
+		if (useWorldGuard && plugin.getConfigManager().isWgEnabled()) {
+			// Loop through all regions player is at
+			for (String region : WorldGuardEvents.getRegionsNames(player.getUniqueId())) {
+				// Get the setting of the region
+				BarSetting wgSetting = plugin.getConfigManager().getWgSetting().get(region);
+				// If everything is not null
+				if (wgSetting != null && wgSetting.getColor() != null && wgSetting.getStyle() != null) {
+					// Apply settings
+					color = wgSetting.getColor();
+					style = wgSetting.getStyle();
+					break;
+				}
+			}
+		}
+		
+		// If damage cause is not null
+		if (cause != null) {
+			// Get settings of the damage cause
+			BarSetting setting = plugin.getConfigManager().getCauseSetting().get(cause.name());
+			// If the setting exists
+			if (setting != null) {
+				color = setting.getColor();
+				style = setting.getStyle();
+			}
+			else {
+				color = plugin.getConfigManager().getCauseSetting().get("Default").getColor();
+				style = plugin.getConfigManager().getCauseSetting().get("Default").getStyle();
+			}
+		}
+		// If creating a new boss bar, apply settings along with the bar
+		if (create)
+			self = Bukkit.createBossBar(title, color, style, new BarFlag[0]);
+		// Otherwise, set color and style only
+		else {
+			self.setColor(color);
+			self.setStyle(style);
+		}
+		
+		
+		
+		// ######################### //
+		// Bar progress
+		// ######################### //
+		// Update SelfBar progress
+		if (hp / max > 1.0)
+			self.setProgress(1.0);
+		else if (hp / max < 0.0)
+			self.setProgress(0.0);
+		else
+			self.setProgress(hp / max);
+		
+		
+		
+		// ######################### //
+		// Bar title
+		// ######################### //
 		// If we are creating a new HealthBar
 		if (create) {
-			self = Bukkit.createBossBar(title, plugin.getConfigManager().getColor(),
-					plugin.getConfigManager().getStyle(), new BarFlag[0]);
-			
 			// If SelfBar is enabled
 			if (plugin.getConfigManager().isSelfEnabled())
 				// If player didn't hide his own bar
@@ -190,22 +258,21 @@ public class HealthBar {
 		else {
 			self.setTitle(title);
 		}
-		
-		
-		
-		// Update SelfBar progress
-		if (hp / max > 1.0)
-			self.setProgress(1.0);
-		else if (hp / max < 0.0)
-			self.setProgress(0.0);
-		else
-			self.setProgress(hp / max);
 	}
 	
 	
 	
-	
-	public void updateEnemy(Player player, LivingEntity target, @Nullable BarType type, double lostgain, boolean create) {
+	/**
+	 * Update/create EnemyBar for player
+	 * 
+	 * @param player Player to update/create
+	 * @param target Player's target
+	 * @param type Bar type to apply, eg. HPLOST when health lost, null when it depends on lostgain
+	 * @param lostgain Hp lost/gained
+	 * @param cause Cause of the damage
+	 * @param create Create a new boss bar object or not
+	 */
+	public void updateEnemy(Player player, LivingEntity target, @Nullable BarType type, double lostgain, @Nullable DamageCause cause, boolean create) {
 		if (plugin.getConfigManager().getOverride())
 			self.removePlayer(player);
 		
@@ -233,6 +300,7 @@ public class HealthBar {
 		
 		this.e_lostgain = lostgain;
 		this.e_type = type;
+		this.e_cause = cause;
 		
 		
 		
@@ -281,10 +349,24 @@ public class HealthBar {
 		
 		
 		
+		BarColor color = plugin.getConfigManager().getEnemyColor();
+		BarStyle style = plugin.getConfigManager().getEnemyStyle();
+		
+		if (create)
+			enemy = Bukkit.createBossBar(title, color, style, new BarFlag[0]);
+		else {
+			enemy.setColor(color);
+			enemy.setStyle(style);
+		}
+		
+		if (e_hp / e_max > 1.0)
+			enemy.setProgress(1.0);
+		else if (e_hp / e_max < 0.0)
+			enemy.setProgress(0.0);
+		else
+			enemy.setProgress(e_hp / e_max);
+		
 		if (create) {
-			enemy = Bukkit.createBossBar(title, plugin.getConfigManager().getEnemyColor(),
-					plugin.getConfigManager().getEnemyStyle(), new BarFlag[0]);
-			
 			if (plugin.getConfigManager().isEnemyEnabled())
 				if (!hide.contains(player.getUniqueId()))
 					enemy.addPlayer(player);
@@ -298,21 +380,14 @@ public class HealthBar {
 		else {
 			enemy.setTitle(title);
 		}
-		
-		
-		
-		if (e_hp / e_max > 1.0)
-			enemy.setProgress(1.0);
-		else if (e_hp / e_max < 0.0)
-			enemy.setProgress(0.0);
-		else
-			enemy.setProgress(e_hp / e_max);
 	}
+	
+	
 	
 	public boolean attemptRemove(int delay) {
 		long elapsedTime = System.currentTimeMillis() - e_lastUpdate;
 		long confVal = delay / 20 * 1000L;
-		if (elapsedTime - confVal >= -20) {
+		if (elapsedTime - confVal >= 0) {
 			removeEnemy();
 			return true;
 		}
@@ -322,6 +397,7 @@ public class HealthBar {
 	public void remove() {
 		this.lostgain = 0;
 		this.type = null;
+		this.cause = null;
 		
 		if (self != null)
 			self.removeAll();
@@ -330,6 +406,7 @@ public class HealthBar {
 	public void removeEnemy() {
 		this.lostgain = 0;
 		this.type = null;
+		this.e_cause = null;
 		
 		if (enemy != null) {
 			enemy.removeAll();
@@ -367,7 +444,6 @@ public class HealthBar {
 	
 	
 	
-	
 	public double getLostgain() {
 		return lostgain;
 	}
@@ -380,6 +456,15 @@ public class HealthBar {
 	public void setType(BarType type) {
 		this.type = type;
 	}
+	public DamageCause getCause() {
+		return cause;
+	}
+	public void setCause(DamageCause cause) {
+		this.cause = cause;
+	}
+	
+	
+	
 	public double getEnemyLostgain() {
 		return e_lostgain;
 	}
@@ -391,5 +476,11 @@ public class HealthBar {
 	}
 	public void setEnemyType(BarType type) {
 		this.e_type = type;
+	}
+	public DamageCause getEnemyCause() {
+		return e_cause;
+	}
+	public void setEnemyCause(DamageCause cause) {
+		this.e_cause = cause;
 	}
 }
