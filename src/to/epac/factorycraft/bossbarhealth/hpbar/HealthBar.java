@@ -366,12 +366,14 @@ public class HealthBar {
 		else
 			enemy.setProgress(e_hp / e_max);
 		
+		
+		this.target = target;
+		
+		
 		if (create) {
 			if (plugin.getConfigManager().isEnemyEnabled())
 				if (!hide.contains(player.getUniqueId()))
 					enemy.addPlayer(player);
-			
-			this.target = target;
 			
 			e_lastUpdate = System.currentTimeMillis();
 			
@@ -385,8 +387,8 @@ public class HealthBar {
 	
 	
 	public boolean attemptRemove(int delay) {
-		long elapsedTime = System.currentTimeMillis() - e_lastUpdate;
-		long confVal = delay / 20 * 1000L;
+		double elapsedTime = System.currentTimeMillis() - e_lastUpdate + 1;
+		double confVal = delay / 20.0 * 1000L;
 		if (elapsedTime - confVal >= 0) {
 			removeEnemy();
 			return true;

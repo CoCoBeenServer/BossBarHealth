@@ -88,9 +88,11 @@ public class DamageHandler implements Listener {
 				}
 			}
 			
+			
 			final int delay = (((LivingEntity) victim).getHealth() <= 0)
 					? plugin.getConfigManager().getEnemyDurZero()
 							: plugin.getConfigManager().getEnemyDurNormal();
+			
 			
 			// Update everyone's EnemyBar if their target is the victim
 			for (Map.Entry<Player, HealthBar> entry : HealthBar.bars.entrySet()) {
