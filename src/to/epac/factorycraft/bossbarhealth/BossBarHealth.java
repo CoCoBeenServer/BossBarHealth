@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import to.epac.factorycraft.bossbarhealth.commands.Commands;
 import to.epac.factorycraft.bossbarhealth.config.ConfigManager;
+import to.epac.factorycraft.bossbarhealth.config.LangManager;
 import to.epac.factorycraft.bossbarhealth.handlers.DamageHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.JoinHandler;
 import to.epac.factorycraft.bossbarhealth.handlers.PlayerMoveHandler;
@@ -21,6 +22,7 @@ public class BossBarHealth extends JavaPlugin {
     private static BossBarHealth inst;
     
     public ConfigManager configManager;
+    public LangManager langManager;
     
     public static boolean usePapi = false;
     public static boolean useWorldGuard = false;
@@ -29,7 +31,9 @@ public class BossBarHealth extends JavaPlugin {
         inst = this;
 
         configManager = new ConfigManager(this);
+        langManager = new LangManager(this);
         configManager.load();
+        langManager.load();
 
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new DamageHandler(), this);

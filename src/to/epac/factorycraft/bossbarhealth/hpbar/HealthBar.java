@@ -339,7 +339,7 @@ public class HealthBar {
 		}
 		else
 			title = title
-					.replaceAll("%e_name%", target.getName())
+					.replaceAll("%e_name%", plugin.langManager.getText(target))
 					.replaceAll("%e_displayname%", target.getCustomName() != null ? target.getCustomName() : "");
 		
 		title = ChatColor.translateAlternateColorCodes('&', title);
