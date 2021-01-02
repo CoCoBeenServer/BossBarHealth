@@ -1,14 +1,13 @@
 package to.epac.factorycraft.bossbarhealth.config;
 
-import java.io.File;
-import java.util.HashMap;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
+
+import java.io.File;
+import java.util.HashMap;
 
 public class LangManager {
 	

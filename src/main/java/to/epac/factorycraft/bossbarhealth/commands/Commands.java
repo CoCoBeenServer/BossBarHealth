@@ -1,15 +1,14 @@
 package to.epac.factorycraft.bossbarhealth.commands;
 
-import java.util.UUID;
-
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
+
+import java.util.UUID;
 
 public class Commands implements CommandExecutor {
 	

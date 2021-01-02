@@ -1,12 +1,11 @@
 package to.epac.factorycraft.bossbarhealth.hooks.WorldGuard;
 
+import net.raidstone.wgevents.events.RegionEnteredEvent;
+import net.raidstone.wgevents.events.RegionLeftEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import net.raidstone.wgevents.events.RegionEnteredEvent;
-import net.raidstone.wgevents.events.RegionLeftEvent;
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar.BarType;

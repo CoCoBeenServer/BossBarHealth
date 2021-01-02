@@ -1,20 +1,19 @@
 package to.epac.factorycraft.bossbarhealth.config;
 
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import to.epac.factorycraft.bossbarhealth.BossBarHealth;
+import to.epac.factorycraft.bossbarhealth.hpbar.BarSetting;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-
-import to.epac.factorycraft.bossbarhealth.BossBarHealth;
-import to.epac.factorycraft.bossbarhealth.hpbar.BarSetting;
 
 public class ConfigManager {
 	

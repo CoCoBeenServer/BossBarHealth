@@ -1,8 +1,8 @@
 package to.epac.factorycraft.bossbarhealth.Utils;
 
-import java.text.DecimalFormat;
-
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
+
+import java.text.DecimalFormat;
 
 public class Utils {
 	

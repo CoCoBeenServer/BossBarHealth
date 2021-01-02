@@ -3,7 +3,6 @@ package to.epac.factorycraft.bossbarhealth.handlers;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar.BarType;

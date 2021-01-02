@@ -3,16 +3,10 @@ package to.epac.factorycraft.bossbarhealth;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import to.epac.factorycraft.bossbarhealth.commands.Commands;
 import to.epac.factorycraft.bossbarhealth.config.ConfigManager;
 import to.epac.factorycraft.bossbarhealth.config.LangManager;
-import to.epac.factorycraft.bossbarhealth.handlers.DamageHandler;
-import to.epac.factorycraft.bossbarhealth.handlers.JoinHandler;
-import to.epac.factorycraft.bossbarhealth.handlers.PlayerMoveHandler;
-import to.epac.factorycraft.bossbarhealth.handlers.QuitHandler;
-import to.epac.factorycraft.bossbarhealth.handlers.RegainHealthHandler;
-import to.epac.factorycraft.bossbarhealth.handlers.RespawnHandler;
+import to.epac.factorycraft.bossbarhealth.handlers.*;
 import to.epac.factorycraft.bossbarhealth.hooks.WorldGuard.WgRegionHandler;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import to.epac.factorycraft.bossbarhealth.metrics.Metrics;

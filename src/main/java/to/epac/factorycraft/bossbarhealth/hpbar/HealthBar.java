@@ -1,16 +1,7 @@
 package to.epac.factorycraft.bossbarhealth.hpbar;
 
-import static to.epac.factorycraft.bossbarhealth.BossBarHealth.usePapi;
-import static to.epac.factorycraft.bossbarhealth.BossBarHealth.useWorldGuard;
-
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
+import me.clip.placeholderapi.PlaceholderAPI;
+import net.raidstone.wgevents.WorldGuardEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -23,11 +14,18 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import me.clip.placeholderapi.PlaceholderAPI;
-import net.raidstone.wgevents.WorldGuardEvents;
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.Utils.Utils;
+
+import javax.annotation.Nullable;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
+import static to.epac.factorycraft.bossbarhealth.BossBarHealth.usePapi;
+import static to.epac.factorycraft.bossbarhealth.BossBarHealth.useWorldGuard;
 
 public class HealthBar {
 	
@@ -107,12 +105,16 @@ public class HealthBar {
 	 * 
 	 * @param player Player to update
 	 */
-	public void attemptUpdate(Player player) {
+	public boolean attemptUpdate(Player player) {
 		long elapsedTime = System.currentTimeMillis() - lastUpdate;
 		long confVal = plugin.getConfigManager().getEnemyDurNormal() / 20 * 1000L;
 		
-		if (elapsedTime - confVal >= 0)
+		if (elapsedTime - confVal >= 0) {
 			update(player, null, 0.0, null, false);
+			return true;
+		}
+
+		return false;
 	}
 	
 	
