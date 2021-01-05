@@ -144,9 +144,9 @@ public class HealthBar {
 		
 		String title = "";
 		if ((type == null && lostgain < 0.0) || type == BarType.HPLOST)
-			title = plugin.getConfigManager().getFormatHpLost().replaceAll("%change%", df.format(lostgain * plugin.getConfigManager().getScale()));
+			title = plugin.getConfigManager().getFormatHpLost().replaceAll("%change%", df.format(Math.abs(lostgain) * plugin.getConfigManager().getScale()));
 		else if ((type == null && lostgain > 0.0) || type == BarType.HPGAIN)
-			title = plugin.getConfigManager().getFormatHpGain().replaceAll("%change%", "+" + df.format(lostgain * plugin.getConfigManager().getScale()));
+			title = plugin.getConfigManager().getFormatHpGain().replaceAll("%change%", df.format(lostgain * plugin.getConfigManager().getScale()));
 		else if ((type == null && lostgain == 0.0) || type == BarType.NORMAL)
 			title = plugin.getConfigManager().getFormatNormal();
 		
@@ -296,9 +296,9 @@ public class HealthBar {
 		
 		String title = "";
 		if ((type == null && lostgain < 0.0) || type == BarType.HPLOST)
-			title = plugin.getConfigManager().getEnemyFormatHpLost().replaceAll("%e_change%", df.format(e_lostgain * plugin.getConfigManager().getScale()));
+			title = plugin.getConfigManager().getEnemyFormatHpLost().replaceAll("%e_change%", df.format(Math.abs(e_lostgain) * plugin.getConfigManager().getScale()));
 		else if ((type == null && lostgain >= 0.0) || type == BarType.HPGAIN)
-			title = plugin.getConfigManager().getEnemyFormatHpGain().replaceAll("%e_change%", "+" + df.format(e_lostgain * plugin.getConfigManager().getScale()));
+			title = plugin.getConfigManager().getEnemyFormatHpGain().replaceAll("%e_change%", df.format(e_lostgain * plugin.getConfigManager().getScale()));
 		
 		this.e_lostgain = lostgain;
 		this.e_type = type;

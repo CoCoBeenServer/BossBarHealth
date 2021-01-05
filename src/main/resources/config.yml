@@ -36,8 +36,8 @@ BossBarHealth:
       # Display format of boss bar health when self HP changes
       # Placeholders:
       # %change%          Player's health gained/lost
-      HpLost: '%direction_cardinal% %displayname% %hp%/%max% &7(&c%change%&7)'
-      HpGain: '%direction_cardinal% %displayname% %hp%/%max% &7(&a%change%&7)'
+      HpLost: '%direction_cardinal% %displayname% %hp%/%max% &7(&c-%change%&7)'
+      HpGain: '%direction_cardinal% %displayname% %hp%/%max% &7(&a+%change%&7)'
       # Duration of lost/gained hp staying on screen, in ticks
       Duration:
         Normal: 40
@@ -74,8 +74,8 @@ BossBarHealth:
       # %e_direction_ordinal%       NE, SE, etc...
       # %e_direction_number%        0-359 degrees
       
-      HpLost: '%e_name% %e_hp%/%e_max% &7(&c%e_change%&7)'
-      HpGain: '%e_name% %e_hp%/%e_max% &7(&a%e_change%&7)'
+      HpLost: '%e_name% %e_hp%/%e_max% &7(&c-%e_change%&7)'
+      HpGain: '%e_name% %e_hp%/%e_max% &7(&a+%e_change%&7)'
       # Duration of enemy's boss bar staying on screen, in ticks
       Duration:
         Normal: 40
