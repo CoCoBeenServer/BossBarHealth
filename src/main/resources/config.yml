@@ -1,7 +1,7 @@
 BossBarHealth:
   # Decimal places of all numbers including current hp, max hp, hp lost/gained
   Decimal: 2
-  
+
   Self:
     # If it is enabled, it will show your hp at all times
     Enabled: true
@@ -19,13 +19,14 @@ BossBarHealth:
     Format:
       # Display format of normal part of boss bar health, the one which shows constantly
       # Placeholders:
-      # %name%          Player's name
-      # %displayname%   Player's display name
-      # %hp%:           Player's health
-      # %max%:          Player's maximum health
-      # %hp_int%        Player's health in integer
-      # %max_int%:      Player's maximum health in integer
-      # %change%:       Player's health lost/gained
+      # %name%                      Player's name
+      # %displayname%               Player's display name
+      # %hp%:                       Player's health
+      # %max%:                      Player's maximum health
+      # %hp_percent%:               Player's health in %
+      # %max_percent%:              Player's maximum health in %
+      # %hp_int%                    Player's health in integer
+      # %max_int%:                  Player's maximum health in integer
       # Player's direction:
       # %direction_cardinalfull%    North, East, South, West
       # %direction_cardinal%        N, E, S, W
@@ -36,6 +37,7 @@ BossBarHealth:
       # Display format of boss bar health when self HP changes
       # Placeholders:
       # %change%          Player's health gained/lost
+      # %change_percent%:           Player's health lost/gained in %
       HpLost: '%direction_cardinal% %displayname% %hp%/%max% &7(&c-%change%&7)'
       HpGain: '%direction_cardinal% %displayname% %hp%/%max% &7(&a+%change%&7)'
       # Duration of lost/gained hp staying on screen, in ticks
@@ -46,7 +48,7 @@ BossBarHealth:
     # Only effective when you have direction placeholders in the display format string
     Facing:
       Refresh: 20
-  
+
   Enemy:
     # If it is enabled, it will show enemy's hp when you attack
     Enabled: true
@@ -57,23 +59,25 @@ BossBarHealth:
     Override: false
     Format:
       # Placeholders:
-      # ** All Self's placeholders can be applied except %change% **
+      # ** All Self's placeholders can be applied except %change% and %change_percent% **
       #
-      # %e_type%          Entity type of the enemy
-      # %e_name%          Name of the enemy
-      # %e_displayname%   Custom display name of the enemy, empty if null
-      # %e_hp%            Enemy's health
-      # %e_max%           Enemy's maximum health
-      # %e_hp_int%        Enemy's health in integer
-      # %e_max_int%       Enemy's maximum health in integer
-      # %e_change%:       Enemy's health lost/gained
+      # %e_type%                      Entity type of the enemy
+      # %e_name%                      Name of the enemy
+      # %e_displayname%               Custom display name of the enemy, empty if null
+      # %e_hp%                        Enemy's health
+      # %e_max%                       Enemy's maximum health
+      # %e_hp_percent%                Enemy's health in %
+      # %e_max_percent%               Enemy's maximum health in %
+      # %e_hp_int%                    Enemy's health in integer
+      # %e_max_int%                   Enemy's maximum health in integer
+      # %e_change%:                   Enemy's health lost/gained
       # Enemy's direction:
-      # %e_direction_cardinalfull%  North, East, South, West
-      # %e_direction_cardinal       %N, E, S, W
-      # %e_direction_ordinalfull%   NorthEast, SouthEast, etc...
-      # %e_direction_ordinal%       NE, SE, etc...
-      # %e_direction_number%        0-359 degrees
-      
+      # %e_direction_cardinalfull%    North, East, South, West
+      # %e_direction_cardinal         N, E, S, W
+      # %e_direction_ordinalfull%     NorthEast, SouthEast, etc...
+      # %e_direction_ordinal%         NE, SE, etc...
+      # %e_direction_number%          0-359 degrees
+
       HpLost: '%e_name% %e_hp%/%e_max% &7(&c-%e_change%&7)'
       HpGain: '%e_name% %e_hp%/%e_max% &7(&a+%e_change%&7)'
       # Duration of enemy's boss bar staying on screen, in ticks
@@ -83,14 +87,14 @@ BossBarHealth:
     # How frequent will the boss bar change when enemy's facing has changed
     Facing:
       Refresh: 20
-  
+
   # Entity type in the list will not have enemy's hp bar shown for players
   # Blacklist:
   # - COW
   # - CHICKEN
   # - PIG
   Blacklist: []
-  
+
   # How will the boss bar for player himself shows when takes specified type of damage
   DamageCause:
     # If the damage taken is not specified below
@@ -103,7 +107,7 @@ BossBarHealth:
     FALL:
       Color: WHITE
       Style: SOLID
-    
+
   # Settings of other plugins that was supported by BossBarHealth
   Hooks:
     # Hook of WorldGuard, update boss bar's color and style when entering region
@@ -117,6 +121,6 @@ BossBarHealth:
         'spawn':
           Color: BLUE
           Style: SOLID
-        # 'shop':
+          # 'shop':
           # Color: PURPLE
           # Style: SEGMENTED_6

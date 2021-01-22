@@ -25,7 +25,7 @@ public class DamageHandler implements Listener {
         Entity victim = event.getEntity();
 
         if (event.isCancelled()) return;
-        // If victim is not LivintEntity (eg. Ender Crystal)
+        // If victim is not LivingEntity (eg. Ender Crystal)
         if (!(victim instanceof LivingEntity)) return;
 
 
@@ -76,7 +76,7 @@ public class DamageHandler implements Listener {
                 // If shooter is player
                 if (proj.getShooter() instanceof Player)
                     // If shooter is not damaging himself
-                    if (!((Player) proj.getShooter()).equals(victim))
+                    if (!proj.getShooter().equals(victim))
                         damager = (Player) proj.getShooter();
             }
 

@@ -12,12 +12,12 @@ import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import to.epac.factorycraft.bossbarhealth.metrics.Metrics;
 
 public class BossBarHealth extends JavaPlugin {
-	
+
     private static BossBarHealth inst;
-    
+
     public ConfigManager configManager;
     public LangManager langManager;
-    
+
     public static boolean usePapi = false;
     public static boolean useWorldGuard = false;
 
@@ -35,34 +35,33 @@ public class BossBarHealth extends JavaPlugin {
         pm.registerEvents(new QuitHandler(), this);
         pm.registerEvents(new RegainHealthHandler(), this);
         pm.registerEvents(new RespawnHandler(), this);
-        
+
         getCommand("BossBarHealth").setExecutor(new Commands());
-        
+
         if (configManager.isSelfEnabled() || configManager.isEnemyEnabled())
             HealthBar.updateAll();
-        
+
         PlayerMoveHandler.start();
-        
-        
+
+
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-        	getLogger().info("PlaceholderAPI was found. You may use its placeholders in config.");
-        	usePapi = true;
+            getLogger().info("PlaceholderAPI was found. You may use its placeholders in config.");
+            usePapi = true;
         }
         if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null
-        		&& Bukkit.getPluginManager().getPlugin("WorldGuardEvents") != null) {
-        	getLogger().info("WorldGuard and WorldGuardEvents were found. WorldGuard hook settings will now work.");
-        	useWorldGuard = true;
-        	pm.registerEvents(new WgRegionHandler(), this);
+                && Bukkit.getPluginManager().getPlugin("WorldGuardEvents") != null) {
+            getLogger().info("WorldGuard and WorldGuardEvents were found. WorldGuard hook settings will now work.");
+            useWorldGuard = true;
+            pm.registerEvents(new WgRegionHandler(), this);
         }
-        
-        
+
 
         int pluginId = 6432;
         Metrics metrics = new Metrics(this, pluginId);
     }
 
     public void onDisable() {
-        
+
         HealthBar.removeAll();
 
         inst = null;

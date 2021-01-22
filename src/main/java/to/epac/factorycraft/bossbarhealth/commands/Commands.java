@@ -11,77 +11,68 @@ import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 import java.util.UUID;
 
 public class Commands implements CommandExecutor {
-	
-	private BossBarHealth plugin = BossBarHealth.inst();
-	
+
+    private BossBarHealth plugin = BossBarHealth.inst();
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    	
+
         if (args.length == 0) {
             helpPage(sender);
             return false;
         }
-        
-    	if (args[0].equalsIgnoreCase("reload")) {
-    		if (!sender.hasPermission("BossBarHealth.Admin")) {
-    			sender.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
+
+        if (args[0].equalsIgnoreCase("reload")) {
+            if (!sender.hasPermission("BossBarHealth.Admin")) {
+                sender.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
                 return false;
             }
-    		
-        	plugin.getConfigManager().load();
-        	
-        	HealthBar.removeAll();
-        	
-        	if (plugin.getConfigManager().isSelfEnabled() || plugin.getConfigManager().isEnemyEnabled())
-                   HealthBar.updateAll();
-        	
-        	sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &fConfiguration reloaded."));
-        	return true;
+
+            plugin.getConfigManager().load();
+
+            HealthBar.removeAll();
+
+            if (plugin.getConfigManager().isSelfEnabled() || plugin.getConfigManager().isEnemyEnabled())
+                HealthBar.updateAll();
+
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &fConfiguration reloaded."));
+            return true;
         }
-    	
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You must be a player to execute command.");
             return false;
         }
-        
-        
-        
+
+
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
-        
+
         if (!player.hasPermission("BossBarHealth.Admin")) {
             player.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
             return false;
-        }
-        
-        else if (args[0].equalsIgnoreCase("help")) {
+        } else if (args[0].equalsIgnoreCase("help")) {
             helpPage(sender);
-        }
-        
-        else if (args[0].equalsIgnoreCase("show")) {
+        } else if (args[0].equalsIgnoreCase("show")) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &aShowing health bar."));
-            
-            if (HealthBar.hide.contains(uuid))
-                HealthBar.hide.remove(uuid);
-            
+
+            HealthBar.hide.remove(uuid);
+
             HealthBar bar = HealthBar.bars.get(player);
             if (bar != null) {
-            	if (plugin.getConfigManager().isSelfEnabled())
-            		if (!bar.getSelfBar().getPlayers().contains(player))
-            			bar.getSelfBar().addPlayer(player);
+                if (plugin.getConfigManager().isSelfEnabled())
+                    if (!bar.getSelfBar().getPlayers().contains(player))
+                        bar.getSelfBar().addPlayer(player);
+            } else {
+                bar = new HealthBar();
+                bar.update(player, null, 0, null, true);
             }
-            else {
-            	bar = new HealthBar();
-            	bar.update(player, null, 0, null, true);
-            }
-            
-        }
-        
-        else if (args[0].equalsIgnoreCase("hide")) {
+
+        } else if (args[0].equalsIgnoreCase("hide")) {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &cHiding health bar."));
-            
+
             if (!HealthBar.hide.contains(uuid))
                 HealthBar.hide.add(uuid);
-            
+
             HealthBar bar = HealthBar.bars.get(player);
             if (bar != null) {
                 bar.remove();
@@ -90,7 +81,7 @@ public class Commands implements CommandExecutor {
         }
         return true;
     }
-    
+
     public void helpPage(CommandSender sender) {
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽-----➽ &7BossBarHealth &8➽-----➽"));
         sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8➽ &c<>: Required &d[]: Optional"));

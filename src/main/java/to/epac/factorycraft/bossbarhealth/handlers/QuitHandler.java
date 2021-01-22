@@ -7,13 +7,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import to.epac.factorycraft.bossbarhealth.hpbar.HealthBar;
 
 public class QuitHandler implements Listener {
-	
-	@EventHandler
-	public void onQuit(PlayerQuitEvent event) {
-		Player player = event.getPlayer();
-		HealthBar bar = HealthBar.bars.get(player);
-		
-		if (bar != null)
-			bar.remove();
-	}
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        HealthBar bar = HealthBar.bars.get(player);
+
+        if (bar != null)
+            bar.remove();
+    }
 }
