@@ -51,6 +51,8 @@ public class ConfigManager {
 
     public static HashMap<String, BarSetting> causesetting;
 
+    // Hooks
+    public static boolean citizensenabled;
     public static boolean wgenabled;
     public static HashMap<String, BarSetting> wgsetting;
 
@@ -100,6 +102,8 @@ public class ConfigManager {
 
             causesetting.put(cause, new BarSetting(BarColor.valueOf(dcolor), BarStyle.valueOf(dstyle)));
         }
+
+        citizensenabled = conf.getBoolean("BossBarHealth.Hooks.Citizens.Enabled", false);
 
         wgenabled = conf.getBoolean("BossBarHealth.Hooks.WorldGuard.Enabled", false);
         wgsetting = new HashMap<>();
@@ -281,6 +285,10 @@ public class ConfigManager {
         return causesetting;
     }
 
+
+    public boolean isCitizensEnabled() {
+        return citizensenabled;
+    }
 
     public boolean isWgEnabled() {
         return wgenabled;

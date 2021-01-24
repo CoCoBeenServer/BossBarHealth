@@ -1,6 +1,7 @@
 package to.epac.factorycraft.bossbarhealth.hpbar;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.citizensnpcs.api.CitizensAPI;
 import net.raidstone.wgevents.WorldGuardEvents;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,9 +24,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
-import static to.epac.factorycraft.bossbarhealth.BossBarHealth.usePapi;
-import static to.epac.factorycraft.bossbarhealth.BossBarHealth.useWorldGuard;
 
 public class HealthBar {
 
@@ -180,7 +178,7 @@ public class HealthBar {
                 .replaceAll("%direction_number%", Utils.getDirection(player.getLocation().getYaw(), "NUMBER"));
         title = ChatColor.translateAlternateColorCodes('&', title);
         // If PlaceholderAPI is installed
-        if (usePapi)
+        if (plugin.usePapi())
             title = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, title);
 
 
@@ -192,7 +190,7 @@ public class HealthBar {
         BarStyle style = plugin.getConfigManager().getStyle();
 
         // If WorldGuard is installed and hook enabled
-        if (useWorldGuard && plugin.getConfigManager().isWgEnabled()) {
+        if (plugin.useWorldGuard() && plugin.getConfigManager().isWgEnabled()) {
             // Loop through all regions player is at
             for (String region : WorldGuardEvents.getRegionsNames(player.getUniqueId())) {
                 // Get the setting of the region
@@ -352,17 +350,25 @@ public class HealthBar {
                 .replaceAll("%e_direction_number%", Utils.getDirection(target.getLocation().getYaw(), "NUMBER"));
 
         if (target instanceof Player) {
-            title = title
-                    .replaceAll("%e_name%", target.getName())
-                    .replaceAll("%e_displayname%", ((Player) target).getDisplayName());
+            // If Citizens is installed and hook enabled
+            if (plugin.useCitizens() && plugin.getConfigManager().isCitizensEnabled())
+                title = title
+                        .replaceAll("%e_name%", CitizensAPI.getNPCRegistry().getNPC(target).getName())
+                        .replaceAll("%e_displayname%", CitizensAPI.getNPCRegistry().getNPC(target).getFullName());
+            else
+                title = title
+                        .replaceAll("%e_name%", target.getName())
+                        .replaceAll("%e_displayname%", ((Player) target).getDisplayName());
+
         } else
             title = title
                     .replaceAll("%e_name%", plugin.langManager.getText(target))
                     .replaceAll("%e_displayname%", target.getCustomName() != null ? target.getCustomName() : "");
 
+
         title = ChatColor.translateAlternateColorCodes('&', title);
 
-        if (usePapi)
+        if (plugin.usePapi())
             title = PlaceholderAPI.setPlaceholders((OfflinePlayer) player, title);
 
 

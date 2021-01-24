@@ -18,9 +18,6 @@ public class BossBarHealth extends JavaPlugin {
     public ConfigManager configManager;
     public LangManager langManager;
 
-    public static boolean usePapi = false;
-    public static boolean useWorldGuard = false;
-
     public void onEnable() {
         inst = this;
 
@@ -43,16 +40,15 @@ public class BossBarHealth extends JavaPlugin {
 
         PlayerMoveHandler.start();
 
-
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+        if (usePapi()) {
             getLogger().info("PlaceholderAPI was found. You may use its placeholders in config.");
-            usePapi = true;
         }
-        if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null
-                && Bukkit.getPluginManager().getPlugin("WorldGuardEvents") != null) {
-            getLogger().info("WorldGuard and WorldGuardEvents were found. WorldGuard hook settings will now work.");
-            useWorldGuard = true;
+        if (useWorldGuard()) {
+            getLogger().info("WorldGuard and WorldGuardEvents were found. WorldGuard hook settings in config will now work.");
             pm.registerEvents(new WgRegionHandler(), this);
+        }
+        if (useCitizens()) {
+            getLogger().info("Citizens was found. Citizens hook settings in config will now work.");
         }
 
 
@@ -73,5 +69,18 @@ public class BossBarHealth extends JavaPlugin {
 
     public ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public boolean usePapi() {
+        return Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
+    }
+
+    public boolean useWorldGuard() {
+        return Bukkit.getPluginManager().getPlugin("WorldGuard") != null
+                && Bukkit.getPluginManager().getPlugin("WorldGuardEvents") != null;
+    }
+
+    public boolean useCitizens() {
+        return Bukkit.getPluginManager().getPlugin("Citizens") != null;
     }
 }
