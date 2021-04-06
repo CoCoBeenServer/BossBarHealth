@@ -47,13 +47,15 @@ public class Commands implements CommandExecutor {
         Player player = (Player) sender;
         UUID uuid = player.getUniqueId();
 
-        if (!player.hasPermission("BossBarHealth.Admin")) {
-            player.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
-            return false;
-        } else if (args[0].equalsIgnoreCase("help")) {
-            helpPage(sender);
+        if (args[0].equalsIgnoreCase("help")) {
+            helpPage(player);
         } else if (args[0].equalsIgnoreCase("show")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &aShowing health bar."));
+            if (!player.hasPermission("BossBarHealth.Admin") && !player.hasPermission("BossBarHealth.Show")) {
+                player.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
+                return false;
+            }
+
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &aShowing health bar."));
 
             HealthBar.hide.remove(uuid);
 
@@ -68,7 +70,12 @@ public class Commands implements CommandExecutor {
             }
 
         } else if (args[0].equalsIgnoreCase("hide")) {
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &cHiding health bar."));
+            if (!player.hasPermission("BossBarHealth.Admin") && !player.hasPermission("BossBarHealth.Show")) {
+                player.sendMessage(ChatColor.RED + "You don't have permission to perform this command.");
+                return false;
+            }
+
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&7BossBarHealth &8➽ &cHiding health bar."));
 
             if (!HealthBar.hide.contains(uuid))
                 HealthBar.hide.add(uuid);

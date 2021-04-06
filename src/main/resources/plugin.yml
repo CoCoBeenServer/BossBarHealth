@@ -14,3 +14,10 @@ commands:
 permissions:
   BossBarHealth.Admin:
     description: Give access to all commands
+    default: op
+  BossBarHealth.Hide:
+    description: Give access to /bbh hide
+    default: true
+  BossBarHealth.Show:
+    description: Give access to /bbh show
+    default: true

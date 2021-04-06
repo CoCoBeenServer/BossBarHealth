@@ -351,7 +351,8 @@ public class HealthBar {
 
         if (target instanceof Player) {
             // If Citizens is installed and hook enabled
-            if (plugin.useCitizens() && plugin.getConfigManager().isCitizensEnabled())
+            if (plugin.useCitizens() && plugin.getConfigManager().isCitizensEnabled()
+                    && CitizensAPI.getNPCRegistry().isNPC(target))
                 title = title
                         .replaceAll("%e_name%", CitizensAPI.getNPCRegistry().getNPC(target).getName())
                         .replaceAll("%e_displayname%", CitizensAPI.getNPCRegistry().getNPC(target).getFullName());
