@@ -35,7 +35,6 @@ public class HealthBar {
 
     public static HashMap<Player, HealthBar> bars = new HashMap<>();
     public static List<UUID> hide = new ArrayList<>();
-    public static List<BukkitRunnable> refresh = new ArrayList<>();
 
     private BossBar self;
     private BossBar enemy;

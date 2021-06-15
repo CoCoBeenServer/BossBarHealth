@@ -13,7 +13,9 @@ public class QuitHandler implements Listener {
         Player player = event.getPlayer();
         HealthBar bar = HealthBar.bars.get(player);
 
-        if (bar != null)
+        if (bar != null) {
             bar.remove();
+            HealthBar.bars.remove(player);
+        }
     }
 }
