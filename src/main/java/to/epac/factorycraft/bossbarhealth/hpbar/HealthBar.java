@@ -1,5 +1,6 @@
 package to.epac.factorycraft.bossbarhealth.hpbar;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.citizensnpcs.api.CitizensAPI;
 import net.raidstone.wgevents.WorldGuardEvents;
@@ -14,7 +15,6 @@ import org.bukkit.boss.BossBar;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.scheduler.BukkitRunnable;
 import to.epac.factorycraft.bossbarhealth.BossBarHealth;
 import to.epac.factorycraft.bossbarhealth.Utils.Utils;
 
@@ -360,7 +360,14 @@ public class HealthBar {
                         .replaceAll("%e_name%", target.getName())
                         .replaceAll("%e_displayname%", ((Player) target).getDisplayName());
 
-        } else
+        }
+        // If MythicMobs is installed and hook enabled
+        else if (plugin.useMythicMobs() && plugin.getConfigManager().isMythicMobsEnabled()
+                && MythicMobs.inst().getAPIHelper().isMythicMob(target))
+            title = title
+                    .replaceAll("%e_name%", MythicMobs.inst().getAPIHelper().getMythicMobInstance(target).getType().getInternalName())
+                    .replaceAll("%e_displayname%", MythicMobs.inst().getAPIHelper().getMythicMobInstance(target).getDisplayName());
+        else
             title = title
                     .replaceAll("%e_name%", plugin.langManager.getText(target))
                     .replaceAll("%e_displayname%", target.getCustomName() != null ? target.getCustomName() : "");
@@ -404,6 +411,7 @@ public class HealthBar {
         } else {
             enemy.setTitle(title);
         }
+
     }
 
 

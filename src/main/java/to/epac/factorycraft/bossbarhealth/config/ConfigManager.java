@@ -54,6 +54,7 @@ public class ConfigManager {
     // Hooks
     public static boolean citizensenabled;
     public static boolean wgenabled;
+    public static boolean mmenabled;
     public static HashMap<String, BarSetting> wgsetting;
 
 
@@ -104,6 +105,8 @@ public class ConfigManager {
         }
 
         citizensenabled = conf.getBoolean("BossBarHealth.Hooks.Citizens.Enabled", false);
+
+        mmenabled = conf.getBoolean("BossBarHealth.Hooks.MythicMobs.Enabled", false);
 
         wgenabled = conf.getBoolean("BossBarHealth.Hooks.WorldGuard.Enabled", false);
         wgsetting = new HashMap<>();
@@ -288,6 +291,10 @@ public class ConfigManager {
 
     public boolean isCitizensEnabled() {
         return citizensenabled;
+    }
+
+    public boolean isMythicMobsEnabled() {
+        return mmenabled;
     }
 
     public boolean isWgEnabled() {

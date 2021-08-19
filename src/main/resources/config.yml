@@ -113,6 +113,9 @@ BossBarHealth:
     # Hook of Citizens, use Citizens' method to get enemy NPC's name
     Citizens:
       Enabled: true
+    # Hook of MythicMobs, use MythicMobs' method to get entity's name
+    MythicMobs:
+      Enabled: true
     # Hook of WorldGuard, update boss bar's color and style when entering region
     WorldGuard:
       # If it is enabled, the boss bar will change when you enter/leave regions specified below

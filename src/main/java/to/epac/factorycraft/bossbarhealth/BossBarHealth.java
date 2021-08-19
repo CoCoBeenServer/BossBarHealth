@@ -50,6 +50,9 @@ public class BossBarHealth extends JavaPlugin {
         if (useCitizens()) {
             getLogger().info("Citizens was found. Citizens hook settings in config will now work.");
         }
+        if (useMythicMobs()) {
+            getLogger().info("MythicMobs was found. MythicMobs hook settings in config will now work.");
+        }
 
 
         int pluginId = 6432;
@@ -82,5 +85,9 @@ public class BossBarHealth extends JavaPlugin {
 
     public boolean useCitizens() {
         return Bukkit.getPluginManager().getPlugin("Citizens") != null;
+    }
+
+    public boolean useMythicMobs() {
+        return Bukkit.getPluginManager().getPlugin("MythicMobs") != null;
     }
 }
